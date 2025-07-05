@@ -1,12 +1,12 @@
 import Navbar from "../../components/Navbar/Navbar";
 
-
-function About() {
+function AddPlace() {
     return (
         <div>
             <Navbar/>
+            <a>Hallo</a>
         </div>
     )
 }
 
-export default About
+export default AddPlace

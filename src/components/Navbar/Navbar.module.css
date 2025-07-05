@@ -1,0 +1,43 @@
+.navbar {
+    display: flex;
+    align-items: center;
+    height: 80px;
+    padding: 0 2rem;
+    background: #fff;
+}
+
+.navLinks {
+    list-style: none;
+    display: flex;
+    gap: 1.5rem;
+    margin: 0;
+    padding: 0;
+}
+
+.navLinksLeft {margin-right: auto; margin-left: 5%}
+.navLinksRight {margin-left: auto; margin-right: 5%}
+
+.logoLink {
+    display: flex;
+    align-items: center;
+}
+
+.logo {
+    height: 80px;
+    width: auto;
+}
+
+.navbar a {
+    text-decoration: none;
+    color: #333;
+    font-weight: 500;
+}
+
+.navbar a:hover {
+    color: #0070f3;
+}
+
+.icons {
+    height: 30px;
+    width: 30px;
+}
