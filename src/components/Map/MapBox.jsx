@@ -9,7 +9,7 @@ const MapBox = ({center, zoom, style}) => {
     return (
         <MapContainer
             center={center || position}
-            zoom={zoom || 7}
+            zoom={zoom || 8}
             minZoom={3}
             style={style || defaultStyle}
 

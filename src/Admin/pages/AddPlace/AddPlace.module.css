@@ -1,0 +1,17 @@
+.container {
+    width: 90%;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 2rem;
+}
+
+.input {
+    grid-template-rows: repeat(10, 1fr);
+    display: grid;
+}
+
+.pagePreview {
+    border: 2px solid black;
+    border-radius: 8px;
+}

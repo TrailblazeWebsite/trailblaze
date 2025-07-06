@@ -1,25 +1,36 @@
-import logo from "../../assets/logo.svg";
+import styles from "./Home.module.css"
 import Navbar from "../../components/Navbar/Navbar";
+import Trailer from "../../assets/trailer.mp4"
+import test from "../../Mock/Main.png"
+import logo from "../../assets/logo.png";
+import {Link} from "react-router-dom";
 
 function Home() {
     return (
         <div className="App">
             <Navbar />
-            <header className="App-header">
-                <img src={logo} className="App-logo" alt="logo" />
-                <p>
-                    Edit <code>src/App.js</code> and save to reload.
-                </p>
-
-                <a
-                    className="App-link"
-                    href="https://reactjs.org"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                >
-                    Learn React
-                </a>
-            </header>
+            <div className={styles.videoContainer}>
+                <video autoPlay loop muted playsInline>
+                    <source src={Trailer} type="video/mp4"/>
+                </video>
+            </div>
+            <div className={styles.subtitle}>
+                Newest Places
+            </div>
+            <div className={styles.newPlacesContainer}>
+                <Link to="/about" className={styles.newPlace} aria-label="New Place">
+                    <img src={test} alt="Logo" />
+                </Link>
+                <Link to="/about" className={styles.newPlace} aria-label="New Place">
+                    <img src={test} alt="Logo" />
+                </Link>
+                <Link to="/about" className={styles.newPlace} aria-label="New Place">
+                    <img src={test} alt="Logo" />
+                </Link>
+                <Link to="/about" className={styles.newPlace} aria-label="New Place">
+                    <img src={test} alt="Logo" />
+                </Link>
+            </div>
         </div>
     );
 }

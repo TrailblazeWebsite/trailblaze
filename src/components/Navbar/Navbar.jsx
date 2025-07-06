@@ -1,7 +1,7 @@
 import styles from './Navbar.module.css';
 import {Link} from "react-router-dom";
 
-import logo from "../../assets/logo.svg";
+import logo from "../../assets/logo.png";
 import account from "../../assets/account.svg"
 import search from "../../assets/search.svg"
 
@@ -11,10 +11,9 @@ function Navbar ()  {
             <ul className={`${styles.navLinks} ${styles.navLinksLeft}`}>
                 <li><Link to="/"> Home </Link></li>
                 <li><Link to="/map"> Map </Link></li>
-                <li><Link to="/about"> About </Link></li>
+                <li><Link to="/places"> Categories </Link></li>
                 <li><Link to="/place"> Place </Link></li>
-                <li><Link to="/places"> Places </Link></li>
-                <li><Link to="/addPlace"> AddPlace </Link></li>
+                <li><Link to="/about"> About </Link></li>
             </ul>
 
             <Link to="/" className={styles.logoLink} aria-label="Startseite">
@@ -22,11 +21,11 @@ function Navbar ()  {
             </Link>
 
             <ul className={`${styles.navLinks} ${styles.navLinksRight}`}>
-                <li><Link to="/map">
-                    <img src={account} alt="Account" className={styles.icons}/>
-                </Link></li>
                 <li><Link to="/">
                     <img src={search} alt="Search" className={styles.icons}/>
+                </Link></li>
+                <li><Link to="/adminHome">
+                    <img src={account} alt="Account" className={styles.icons}/>
                 </Link></li>
             </ul>
         </nav>
