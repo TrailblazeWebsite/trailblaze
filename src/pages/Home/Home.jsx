@@ -1,7 +1,7 @@
 import styles from "./Home.module.css"
 import Navbar from "../../components/Navbar/Navbar";
 import Trailer from "../../assets/trailer.mp4"
-import test from "../../Mock/Main.png"
+import test from "../../Mock/wandern_creux_du_van.jpg"
 import logo from "../../assets/logo.png";
 import {Link} from "react-router-dom";
 

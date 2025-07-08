@@ -1,23 +1,16 @@
 import Navbar from "../../components/Navbar/Navbar";
-import MapBox from "../../components/Map/MapBox";
+import MapBox from "../../components/MapBox/MapBox";
+import styles from "./map.module.css"
+import { markers } from "../../Backend/fetchMarkers";
+import { categories } from "../../Backend/fetchCategories";
 
-const costumStyle = {
-    height: '800px',
-    width: '90%',
-    borderRadius: '8px',
-    border: '2px solid #ccc'
-}
-
-function Map() {
+export default function Map() {
     return (
-        <div className="App">
+        <div>
             <Navbar />
-            <MapBox
-            style={costumStyle}
-            className="mapContainer"
-            />
+            <div className={styles.mapContainer}>
+                <MapBox markers={markers} categories={categories}/>
+            </div>
         </div>
     );
 }
-
-export default Map

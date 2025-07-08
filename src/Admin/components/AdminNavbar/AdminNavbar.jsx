@@ -3,14 +3,12 @@ import {Link} from "react-router-dom";
 
 import logo from "../../../assets/logo.png";
 import account from "../../../assets/account.svg"
-import search from "../../../assets/search.svg"
 
 function AdminNavbar ()  {
     return (
         <nav className={styles.navbar}>
             <ul className={`${styles.navLinks} ${styles.navLinksLeft}`}>
                 <li><Link to="/addPlace"> AddPlace </Link></li>
-                <li><Link to="/managePlaces"> Manage Places </Link></li>
                 <li><Link to="/manageUser"> Manage User </Link></li>
             </ul>
 
