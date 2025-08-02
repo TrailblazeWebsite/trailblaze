@@ -8,7 +8,8 @@ function AdminNavbar ()  {
     return (
         <nav className={styles.navbar}>
             <ul className={`${styles.navLinks} ${styles.navLinksLeft}`}>
-                <li><Link to="/addPlace"> AddPlace </Link></li>
+                <li><Link to="/addPlace"> Edit Locations </Link></li>
+                <li><Link to="/editCategories"> Edit Categories </Link></li>
                 <li><Link to="/manageUser"> Manage User </Link></li>
             </ul>
 

@@ -70,8 +70,6 @@ export default function MapBox({
                 markers.map(renderMarker)
             )}
 
-
-
         </MapContainer>
     )
 }

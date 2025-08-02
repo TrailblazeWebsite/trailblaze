@@ -1,6 +1,5 @@
 import Navbar from "../../components/Navbar/Navbar";
 import ReactMarkdown from "react-markdown";
-import img from "../../Mock/wandern_creux_du_van.jpg"
 import styles from "./About.module.css"
 
 
@@ -10,7 +9,7 @@ function About() {
             <Navbar/>
             <div>
                 <div className={styles.imgWrapper}>
-                    <img src={img} alt="Image" className={styles.image}/>
+                    <img src={'https://res.cloudinary.com/dgfycfxe1/image/upload/v1754151712/cld-sample-2.jpg'} alt="Image" className={styles.image}/>
                 </div>
                 <div className={styles.persons}>
                     <div className={styles.person}>
