@@ -1,98 +1,122 @@
 import AdminNavbar from "../../components/AdminNavbar/AdminNavbar";
-import { useState } from "react";
+import {useEffect, useState} from "react";
 import styles from "./AddPlace.module.css"
 import PlaceDummy from "../../components/PlaceDummy/PlaceDummy";
+import { supabase } from "../../../Backend/supabaseClient";
 
-function AddPlace() {
-    const [name, setName] = useState("");
-    const [shortDescription, setShortDescription] = useState("");
-    const [description, setDescription] = useState("");
-    const [coordinates, setCoordinates] = useState("");
-    const [rating, setRating] = useState("");
+export default function AddPlace() {
+    const [categories, setCategories] = useState([])
+    const [formData, setFormData] = useState({
+        name: '',
+        short_description: '',
+        description: '',
+        category_id: '',
+        rating: '',
+        longitude: '',
+        latitude: ''
+    })
+    const [message, setMessage] = useState(null)
 
+    // Kategorien beim Laden holen
+    useEffect(() => {
+        const fetchCategories = async () => {
+            const {data, error} = await supabase.from('categories').select()
 
-
-    // Handler wird bei jeder Änderung im Input aufgerufen
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        switch (name) {
-            case "name":
-                setName(value);
-                break;
-            case "shortDescription":
-                setShortDescription(value);
-                break;
-            case "description":
-                setDescription(value);
-                break;
-            case "coordinates":
-                setCoordinates(value);
-                break;
-            case "rating":
-                setRating(value);
-                break;
-            default:
-                break;
+            if (error) {
+                console.error('Fehler beim Laden der Kategorien:', error.message)
+            } else {
+                console.log('Geladene Kategorien:', data)
+                setCategories(data)
+            }
         }
-    };
+
+        fetchCategories()
+    }, [])
+
+    // Eingaben aktualisieren
+    const handleChange = (e) => {
+        const {name, value} = e.target
+        setFormData((prev) => ({...prev, [name]: value}))
+    }
+
+    // Formular absenden
+    const handleSubmit = async (e) => {
+        e.preventDefault()
+
+        const longitude = parseFloat(formData.longitude)
+        const latitude = parseFloat(formData.latitude)
+
+        const {data, error} = await supabase.from('locations').insert([{
+            name: formData.name,
+            short_description: formData.short_description,
+            description: formData.description,
+            category_id: parseInt(formData.category_id),
+            rating: parseFloat(formData.rating),
+            coordinates: `POINT(${longitude} ${latitude})`
+        }])
+
+        if (error) {
+            setMessage(`❌ Fehler: ${error.message}`)
+        } else {
+            setMessage('✅ Eintrag erfolgreich erstellt!')
+            setFormData({
+                name: '',
+                short_description: '',
+                description: '',
+                category_id: '',
+                rating: '',
+                longitude: '',
+                latitude: ''
+            })
+        }
+    }
 
     return (
         <div>
             <AdminNavbar/>
             <div className={styles.container}>
                 <div className={styles.input}>
-                    <label htmlFor="meinTextfeld" className="block mb-2 font-semibold">
-                        Dein Text:
-                    </label>
+                    <form onSubmit={handleSubmit} style={{display: 'flex', flexDirection: 'column', gap: '1rem'}}>
+                        <input name="name" value={formData.name} onChange={handleChange} placeholder="Name des Ortes"
+                               required/>
+                        <input name="short_description" value={formData.short_description} onChange={handleChange}
+                               placeholder="Kurzbeschreibung"/>
+                        <textarea name="description" value={formData.description} onChange={handleChange}
+                                  placeholder="Beschreibung"/>
 
-                    <input
-                        id="meinTextfeld"
-                        type="text"
-                        value={name}
-                        onChange={handleChange}
-                        placeholder="Tippe etwas ein…"
-                        className="border rounded px-3 py-2 w-full"
-                    />
+                        <select name="category_id" value={formData.category_id} onChange={handleChange} required>
+                            <option value="">-- Kategorie wählen --</option>
+                            {categories.map((cat) => (
+                                <option key={cat.id} value={cat.id}>{cat.name}</option>
+                            ))}
+                        </select>
 
-                    <input
-                        id="meinTextfeld"
-                        type="text"
-                        value={shortDescription}
-                        onChange={handleChange}
-                        placeholder="Tippe etwas ein…"
-                        className="border rounded px-3 py-2 w-full"
-                    />
+                        <input type="number" step="0.1" min="0" max="5" name="rating" value={formData.rating}
+                               onChange={handleChange} placeholder="Bewertung (z.B. 4.5)" required/>
 
-                    <input
-                        id="meinTextfeld"
-                        type="text"
-                        value={description}
-                        onChange={handleChange}
-                        placeholder="Tippe etwas ein…"
-                        className="border rounded px-3 py-2 w-full"
-                    />
+                        <input
+                            type="number"
+                            step="0.000001"
+                            name="longitude"
+                            value={formData.longitude}
+                            onChange={handleChange}
+                            placeholder="Längengrad (z. B. 7.6271)"
+                            required
+                        />
 
-                    <input
-                        id="meinTextfeld"
-                        type="text"
-                        value={coordinates}
-                        onChange={handleChange}
-                        placeholder="Tippe etwas ein…"
-                        className="border rounded px-3 py-2 w-full"
-                    />
+                        <input
+                            type="number"
+                            step="0.000001"
+                            name="latitude"
+                            value={formData.latitude}
+                            onChange={handleChange}
+                            placeholder="Breitengrad (z. B. 47.4817)"
+                            required
+                        />
 
-                    <input
-                        id="meinTextfeld"
-                        type="text"
-                        value={rating}
-                        onChange={handleChange}
-                        placeholder="Tippe etwas ein…"
-                        className="border rounded px-3 py-2 w-full"
-                    />
-
-                    <button>
-                        submit
-                    </button>
+                        <button type="submit">Speichern</button>
+                    </form>
+                    {message && <p>{message}</p>}
                 </div>
                 <div className={styles.pagePreview}>
                     <PlaceDummy/>
@@ -101,5 +125,3 @@ function AddPlace() {
         </div>
     )
 }
-
-export default AddPlace
