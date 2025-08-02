@@ -10,10 +10,12 @@ export default function AddPlace() {
         name: '',
         short_description: '',
         description: '',
-        category_id: '',
-        rating: '',
         longitude: '',
-        latitude: ''
+        latitude: '',
+        image_url: '',
+        gallery_urls: [],
+        rating: '',
+        category_id: ''
     })
     const [message, setMessage] = useState(null)
 
@@ -52,7 +54,9 @@ export default function AddPlace() {
             description: formData.description,
             category_id: parseInt(formData.category_id),
             rating: parseFloat(formData.rating),
-            coordinates: `POINT(${longitude} ${latitude})`
+            coordinates: `POINT(${longitude} ${latitude})`,
+            image_url: formData.image_url,
+            gallery_urls: formData.gallery_urls
         }])
 
         if (error) {
@@ -63,10 +67,12 @@ export default function AddPlace() {
                 name: '',
                 short_description: '',
                 description: '',
-                category_id: '',
-                rating: '',
                 longitude: '',
-                latitude: ''
+                latitude: '',
+                image_url: '',
+                gallery_urls: [],
+                rating: '',
+                category_id: ''
             })
         }
     }
@@ -112,6 +118,28 @@ export default function AddPlace() {
                             onChange={handleChange}
                             placeholder="Breitengrad (z. B. 47.4817)"
                             required
+                        />
+
+                        <input
+                            name="image_url"
+                            value={formData.image_url}
+                            onChange={handleChange}
+                            placeholder="Bild-URL"
+                        />
+
+                        <textarea
+                            name="gallery_urls"
+                            value={formData.gallery_urls.join('\n')}
+                            onChange={(e) =>
+                                setFormData((prev) => ({
+                                    ...prev,
+                                    gallery_urls: e.target.value
+                                        .split('\n')
+                                        .map(url => url.trim())
+                                        .filter(url => url !== '')
+                                }))
+                            }
+                            placeholder="Weitere Bild-URLs, jeweils eine pro Zeile"
                         />
 
                         <button type="submit">Speichern</button>

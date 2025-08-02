@@ -10,7 +10,6 @@ function AdminNavbar ()  {
             <ul className={`${styles.navLinks} ${styles.navLinksLeft}`}>
                 <li><Link to="/addPlace"> Edit Locations </Link></li>
                 <li><Link to="/editCategories"> Edit Categories </Link></li>
-                <li><Link to="/manageUser"> Manage User </Link></li>
             </ul>
 
             <Link to="/" className={styles.logoLink} aria-label="Startseite">

@@ -9,7 +9,6 @@ import Places from "./pages/Categories/Categories"
 import AddPlace from "./Admin/pages/AddPlace/AddPlace";
 import NotFoundPage from "./pages/NotFoundPage";
 import AdminHome from "./Admin/pages/AdminHome/AdminHome";
-import ManageUser from "./Admin/pages/MangeUser/ManageUser";
 import EditCategories from "./Admin/pages/editLocations/EditCategories";
 
 function App() {
@@ -23,7 +22,6 @@ function App() {
         <Route path="/map" element={<Map />} />
         <Route path="/addPlace" element={<AddPlace />} />
         <Route path="/adminHome" element={<AdminHome />} />
-        <Route path="/managePlaces" element={<ManageUser />} />
         <Route path="/editCategories" element={<EditCategories />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
