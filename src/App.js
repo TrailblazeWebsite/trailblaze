@@ -10,6 +10,7 @@ import AddPlace from "./Admin/pages/AddPlace/AddPlace";
 import NotFoundPage from "./pages/NotFoundPage";
 import AdminHome from "./Admin/pages/AdminHome/AdminHome";
 import EditCategories from "./Admin/pages/editLocations/EditCategories";
+import CategoryDetails from "./pages/CategoryDetail/CategoryDetails";
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
         <Route path="/addPlace" element={<AddPlace />} />
         <Route path="/adminHome" element={<AdminHome />} />
         <Route path="/editCategories" element={<EditCategories />} />
+        <Route path="/categories/:id" element={<CategoryDetails />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </Router>

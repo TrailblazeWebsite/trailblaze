@@ -33,7 +33,7 @@ export default function Categories() {
                 {categories.map(cat => (
                     <div key={cat.id} className={styles.category}>
                         <div>
-                            <h2><Link to={`/${cat.name}`}>{cat.name}</Link></h2>
+                            <h2><Link to={`/categories/${cat.id}`}>{cat.name}</Link></h2>
                             <p>{cat.description}</p>
                         </div>
                         {cat.image_url && (

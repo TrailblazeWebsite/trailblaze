@@ -13,8 +13,6 @@ const customItem = new Icon({
     iconSize: [20, 20],
 })
 
-
-
 export default function MapBox({
                                    center = defaultCenter,
                                    zoom = 8,
@@ -29,7 +27,7 @@ export default function MapBox({
             <Popup>
                 <h3>{m.name}</h3>
                 <h4>{m.description}</h4>
-                <Link to="/"> more about {m.name} </Link>
+                <Link to="/{m.name}"> more about {m.name} </Link>
             </Popup>
         </Marker>
     );

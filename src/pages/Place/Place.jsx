@@ -13,12 +13,13 @@ export default function Place() {
 
     useEffect(() => {
         const fetchPlace = async () => {
-            // 1. Ort laden
             const { data: placeData, error } = await supabase
-                .from("locations")
-                .select("*")
-                .eq("id", parseInt(id, 10))
-                .single()
+                .rpc("get_location_with_geojson", { loc_id: parseInt(id, 10) })
+                .single();
+
+            if (placeData.coordinates?.coordinates) {
+                placeData.coordinates = placeData.coordinates.coordinates;
+            }
 
 
             if (error || !placeData) {
@@ -27,7 +28,6 @@ export default function Place() {
                 return;
             }
 
-            // 2. Kategorie-Namen manuell laden (wenn nötig)
             if (placeData.category_id) {
                 const { data: categoryData, error: categoryError } = await supabase
                     .from("categories")
@@ -60,6 +60,8 @@ export default function Place() {
     const googleMapsLink = place.coordinates
         ? `https://www.google.com/maps/search/?api=1&query=${place.coordinates[1]},${place.coordinates[0]}`
         : "#";
+
+
 
     return (
         <div>
@@ -109,7 +111,7 @@ export default function Place() {
                             <Map
                                 markers={[{
                                     name: place.name,
-                                    coordinates: place.coordinates,
+                                    coordinates:  [place.coordinates[1], place.coordinates[0]],
                                     description: place.short_description,
                                     category: place.category.name
                                 }]}

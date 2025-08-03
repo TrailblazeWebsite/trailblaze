@@ -3,6 +3,8 @@ import Navbar from "../../components/Navbar/Navbar";
 import MapBox from "../../components/MapBox/MapBox";
 import styles from "./map.module.css";
 
+
+
 export default function Map() {
     const [markers, setMarkers] = useState([]);
     const [categories, setCategories] = useState([]);

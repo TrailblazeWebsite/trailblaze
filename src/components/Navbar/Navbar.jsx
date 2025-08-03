@@ -4,16 +4,14 @@ import {Link} from "react-router-dom";
 import logo from "../../assets/logo.png";
 import account from "../../assets/account.svg"
 import search from "../../assets/search.svg"
-import {place} from "../../Backend/fetchPlace";
 
 function Navbar ()  {
     return (
         <nav className={styles.navbar}>
             <ul className={`${styles.navLinks} ${styles.navLinksLeft}`}>
                 <li><Link to="/"> Home </Link></li>
-                <li><Link to="/map"> Map </Link></li>
                 <li><Link to="/places"> Categories </Link></li>
-                <li><Link to={`/place/${3}`}>Location</Link></li>
+                <li><Link to="/map"> Map </Link></li>
                 <li><Link to="/about"> About </Link></li>
             </ul>
 
