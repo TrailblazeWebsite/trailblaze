@@ -4,6 +4,7 @@ import 'leaflet/dist/leaflet.css';
 import { Icon } from "leaflet";
 import markerImage from "../../assets/search.svg"
 import {Link} from "react-router-dom";
+import React from "react";
 
 const defaultCenter = [46.484, 8.1336]
 const defaultStyle = { height: '100%', width: '100%'}
@@ -22,12 +23,16 @@ export default function MapBox({
                                })
 {
 
+    const validMarkers = markers.filter(m => Array.isArray(m.coordinates) && m.coordinates.length === 2);
+
+
+
     const renderMarker = (m, index) => (
         <Marker key={m.id ?? m.name ?? index} position={m.coordinates} icon={customItem}>
             <Popup>
                 <h3>{m.name}</h3>
                 <h4>{m.description}</h4>
-                <Link to={`/place/${m.id}`}>more about {m.name}</Link>
+                {m.id && <h3><Link to={`/place/${m.id}`}>{m.name}</Link></h3>}
             </Popup>
         </Marker>
     );
@@ -57,7 +62,7 @@ export default function MapBox({
                             color={category.color}
                         >
                             <LayerGroup>
-                                {markers
+                                {validMarkers
                                     .filter(m => m.category === category.category)
                                     .map(renderMarker)}
                             </LayerGroup>

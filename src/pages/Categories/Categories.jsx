@@ -11,7 +11,10 @@ export default function Categories() {
 
     React.useEffect(() => {
         const fetchCategories = async () => {
-            const { data, error } = await supabase.from('categories').select();
+            const { data, error } = await supabase
+                .from('categories')
+                .select()
+                .order('name', { ascending: true });
             if (error) {
                 setError(error.message);
             } else {

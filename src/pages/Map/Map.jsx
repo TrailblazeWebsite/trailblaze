@@ -13,26 +13,31 @@ export default function Map() {
         async function fetchData() {
             try {
                 const { data, error } = await supabase
-                    .rpc("get_all_locations_with_geojson"); // nutze hier deine eigene Funktion
+                    .rpc("get_all_locations_with_geojson");
 
                 if (error) {
                     throw error;
                 }
-                console.log("Supabase data:", data);  // <<<<<< Check data here
+                console.log("✅ Rohe Daten von Supabase:");
+                data.forEach((loc, index) => {
+                    console.log(`📍 ${index + 1}:`, loc);
+                });
 
                 const transformed = data
-                    .map(loc => {
-                        const coords = loc.coordinates?.coordinates;
-                        if (!coords) return null;
+                    .filter(loc =>
+                        loc.coordinates &&
+                        Array.isArray(loc.coordinates.coordinates) &&
+                        loc.coordinates.coordinates.length === 2
 
-                        return {
-                            name: loc.name,
-                            coordinates: [coords[1], coords[0]], // Reihenfolge tauschen hier!
-                            description: loc.short_description,
-                            category: loc.category_name || "Unbekannt"
-                        };
-                    })
-                    .filter(m => m !== null);
+                    )
+                    .map(loc => ({
+                        id: loc.id,
+                        name: loc.name,
+                        coordinates: [loc.coordinates.coordinates[1], loc.coordinates.coordinates[0]],
+                        description: loc.short_description,
+                        category: loc.category_name || "Unbekannt"
+                    }));
+
 
 
                 setMarkers(transformed);
@@ -45,6 +50,7 @@ export default function Map() {
                 }));
 
                 setCategories(categoryObjects);
+
             } catch (err) {
                 console.error("Fehler beim Laden der Marker:", err.message);
             } finally {

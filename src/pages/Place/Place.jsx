@@ -65,7 +65,7 @@ export default function Place() {
                         <h1>{place.name}</h1>
                         {place.category && (
                             <h3>
-                                <Link to={`/category/${place.category_id}`}>{place.category?.name}</Link>
+                                <Link to={`/categories/${place.category_id}`}>{place.category?.name}</Link>
                             </h3>
                         )}
                         <p>{place.description}</p>

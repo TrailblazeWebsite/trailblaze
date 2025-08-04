@@ -34,7 +34,8 @@ export default function CategoryDetails() {
             const { data: locationsData, error: locError } = await supabase
                 .from('locations')
                 .select('*')
-                .eq('category_id', id);
+                .eq('category_id', id)
+                .order('name', { ascending: true });
 
             if (locError) {
                 setError(locError.message);

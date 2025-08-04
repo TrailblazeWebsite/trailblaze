@@ -18,7 +18,7 @@ function Home() {
             const { data: locationsData, error: locError } = await supabase
                 .from('locations')
                 .select('*')
-                .order('created_at')
+                .order('created_at', { ascending: false })
                 .limit(4);
 
             if (locError) {
