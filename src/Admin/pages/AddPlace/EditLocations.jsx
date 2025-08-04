@@ -30,8 +30,7 @@ export default function EditLocations() {
             const {data, error} = await supabase
                 .from('categories')
                 .select()
-                .order('name')
-                .order('category_id')
+                .order('name', {ascending: true})
 
             if (error) {
                 console.error('Fehler beim Laden der Kategorien:', error.message)
@@ -43,7 +42,7 @@ export default function EditLocations() {
         fetchCategories()
 
         const fetchLocations = async () => {
-            const { data, error } = await supabase.from('locations').select();
+            const { data, error } = await supabase.rpc('get_all_locations_with_geojson');
 
             if (error) {
                 console.error('Fehler beim Laden der Orte:', error.message);
@@ -56,7 +55,6 @@ export default function EditLocations() {
 
     }, [])
 
-    // Eingaben aktualisieren
     const handleChange = (e) => {
         const {name, value} = e.target
         setFormData((prev) => ({...prev, [name]: value}))
@@ -144,7 +142,6 @@ export default function EditLocations() {
                 category_id: ''
             });
 
-            // Liste neu laden
             const { data: updatedLocations } = await supabase.from('locations').select();
             setLocations(updatedLocations);
         }
@@ -202,10 +199,20 @@ export default function EditLocations() {
                             }}
                         >
                             <option value="">➕ Neuer Ort</option>
-                            {locations.map(loc => (
-                                <option key={loc.id} value={loc.id}>{loc.name}</option>
+
+                            {categories.map((cat) => (
+                                <optgroup key={cat.id} label={cat.name}>
+                                    {locations
+                                        .filter((loc) => loc.category_id === cat.id)
+                                        .map((loc) => (
+                                            <option key={loc.id} value={loc.id}>
+                                                {loc.name}
+                                            </option>
+                                        ))}
+                                </optgroup>
                             ))}
                         </select>
+
 
                         <input name="name" value={formData.name} onChange={handleChange} placeholder="Name des Ortes"
                                required/>
@@ -270,7 +277,7 @@ export default function EditLocations() {
                         {selectedId && (
                             <button
                                 type="button"
-                                style={{ backgroundColor: 'crimson', color: 'white' }}
+                                style={{backgroundColor: 'crimson', color: 'white'}}
                                 onClick={handleDelete}
                             >
                                 🗑️ Ort löschen
