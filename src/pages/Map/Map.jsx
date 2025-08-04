@@ -2,8 +2,7 @@ import { useEffect, useState } from "react";
 import Navbar from "../../components/Navbar/Navbar";
 import MapBox from "../../components/MapBox/MapBox";
 import styles from "./map.module.css";
-
-
+import { supabase } from "../../Backend/supabaseClient";
 
 export default function Map() {
     const [markers, setMarkers] = useState([]);
@@ -13,21 +12,41 @@ export default function Map() {
     useEffect(() => {
         async function fetchData() {
             try {
-                const response = await fetch("/markers.json"); // oder dein API-Endpunkt
-                const markersData = await response.json();
-                setMarkers(markersData);
+                const { data, error } = await supabase
+                    .rpc("get_all_locations_with_geojson"); // nutze hier deine eigene Funktion
 
-                const uniqueCategories = [...new Set(markersData.map(m => m.category))];
+                if (error) {
+                    throw error;
+                }
+                console.log("Supabase data:", data);  // <<<<<< Check data here
 
+                const transformed = data
+                    .map(loc => {
+                        const coords = loc.coordinates?.coordinates;
+                        if (!coords) return null;
+
+                        return {
+                            name: loc.name,
+                            coordinates: [coords[1], coords[0]], // Reihenfolge tauschen hier!
+                            description: loc.short_description,
+                            category: loc.category_name || "Unbekannt"
+                        };
+                    })
+                    .filter(m => m !== null);
+
+
+                setMarkers(transformed);
+
+                const uniqueCategories = [...new Set(transformed.map(m => m.category))];
                 const categoryObjects = uniqueCategories.map(cat => ({
                     category: cat,
-                    color: "#3388ff",
+                    color: "#3388ff", // evtl. dynamisch
                     visible: true
                 }));
 
                 setCategories(categoryObjects);
             } catch (err) {
-                console.error("Fehler beim Laden der Marker:", err);
+                console.error("Fehler beim Laden der Marker:", err.message);
             } finally {
                 setLoading(false);
             }
@@ -36,7 +55,7 @@ export default function Map() {
         fetchData();
     }, []);
 
-    if (loading) return <p>Loading map...</p>;
+    if (loading) return <p>⏳ Lädt Karte...</p>;
 
     return (
         <div>

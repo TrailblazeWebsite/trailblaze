@@ -50,13 +50,6 @@ export default function Place() {
     if (loading) return <div>⏳ Lädt...</div>;
     if (!place) return <div>❌ Ort nicht gefunden</div>;
 
-    const marker = {
-        name: place.name,
-        coordinates: place.coordinates,
-        description: place.short_description,
-        category: place.category?.name || "Unbekannt"
-    };
-
     const googleMapsLink = place.coordinates
         ? `https://www.google.com/maps/search/?api=1&query=${place.coordinates[1]},${place.coordinates[0]}`
         : "#";
@@ -72,7 +65,7 @@ export default function Place() {
                         <h1>{place.name}</h1>
                         {place.category && (
                             <h3>
-                                <Link to={`/${place.category.name}`}>{place.category.name}</Link>
+                                <Link to={`/category/${place.category_id}`}>{place.category?.name}</Link>
                             </h3>
                         )}
                         <p>{place.description}</p>

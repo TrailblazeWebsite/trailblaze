@@ -65,13 +65,12 @@ export default function CategoryDetails() {
                         <img src={category.image_url} alt={category.name} className={styles.categoriesImage} />
                     )}
                 </div>
-
-                <h2>📍 Orte in dieser Kategorie:</h2>
                 <div className={styles.locationList}>
                     {locations.map(loc => (
                         <div key={loc.id} className={styles.locationItem}>
                             <h3><Link to={`/place/${loc.id}`}>{loc.name}</Link></h3>
                             <p>{loc.short_description}</p>
+                            <img src={loc.image_url} alt={category.name} className={styles.categoriesImage}/>
                         </div>
                     ))}
                 </div>

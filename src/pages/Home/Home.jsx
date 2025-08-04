@@ -1,9 +1,42 @@
 import styles from "./Home.module.css"
 import Navbar from "../../components/Navbar/Navbar";
 import Trailer from "../../assets/trailer.mp4"
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
+import React, {useEffect, useState} from "react";
+import {supabase} from "../../Backend/supabaseClient";
 
 function Home() {
+    const [locations, setLocations] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    useEffect(() => {
+        const fetchCategoryAndLocations = async () => {
+            setLoading(true);
+
+            // Fetch locations for that category
+            const { data: locationsData, error: locError } = await supabase
+                .from('locations')
+                .select('*')
+                .order('created_at')
+                .limit(4);
+
+            if (locError) {
+                setError(locError.message);
+            } else {
+                setLocations(locationsData);
+            }
+
+            setLoading(false);
+        };
+
+        fetchCategoryAndLocations();
+    }, []);
+
+    if (loading) return <div>⏳ Lädt...</div>;
+    if (error) return <div>❌ Fehler: {error}</div>;
+
+
     return (
         <div className="App">
             <Navbar />
@@ -16,18 +49,16 @@ function Home() {
                 Newest Places
             </div>
             <div className={styles.newPlacesContainer}>
-                <Link to="/about" className={styles.newPlace} aria-label="New Place">
-                    <img src={"https://res.cloudinary.com/dgfycfxe1/image/upload/v1754151712/cld-sample-2.jpg"} alt="Logo" />
-                </Link>
-                <Link to="/about" className={styles.newPlace} aria-label="New Place">
-                    <img src={"https://res.cloudinary.com/dgfycfxe1/image/upload/v1754151712/cld-sample-2.jpg"} alt="Logo" />
-                </Link>
-                <Link to="/about" className={styles.newPlace} aria-label="New Place">
-                    <img src={"https://res.cloudinary.com/dgfycfxe1/image/upload/v1754151712/cld-sample-2.jpg"} alt="Logo" />
-                </Link>
-                <Link to="/about" className={styles.newPlace} aria-label="New Place">
-                    <img src={"https://res.cloudinary.com/dgfycfxe1/image/upload/v1754151712/cld-sample-2.jpg"} alt="Logo" />
-                </Link>
+                {locations.map(loc => (
+                    <div key={loc.id} className={styles.locationItem}>
+                        {loc.name && loc.id && (
+                            <>
+                                <h3><Link to={`/place/${loc.id}`}>{loc.name}</Link></h3>
+                                <p>{loc.short_description}</p>
+                            </>
+                        )}
+                    </div>
+                ))}
             </div>
         </div>
     );

@@ -1,7 +1,7 @@
 import styles from './MapBox.module.css'
 import {MapContainer, Marker, ScaleControl, Popup, TileLayer, LayersControl, LayerGroup} from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
-import {icon, Icon, marker} from "leaflet";
+import { Icon } from "leaflet";
 import markerImage from "../../assets/search.svg"
 import {Link} from "react-router-dom";
 
@@ -22,12 +22,12 @@ export default function MapBox({
                                })
 {
 
-    const renderMarker = (m) => (
-        <Marker key={m.name} position={m.coordinates} icon={customItem}>
+    const renderMarker = (m, index) => (
+        <Marker key={m.id ?? m.name ?? index} position={m.coordinates} icon={customItem}>
             <Popup>
                 <h3>{m.name}</h3>
                 <h4>{m.description}</h4>
-                <Link to="/{m.name}"> more about {m.name} </Link>
+                <Link to={`/place/${m.id}`}>more about {m.name}</Link>
             </Popup>
         </Marker>
     );
@@ -51,6 +51,7 @@ export default function MapBox({
                 <LayersControl position="topright">
                     {categories.map(category => (
                         <LayersControl.Overlay
+                            key={category.category}
                             name={category.category}
                             checked={category.visible || false}
                             color={category.color}
