@@ -53,6 +53,13 @@ function Home() {
                     <div key={loc.id} className={styles.locationItem}>
                         {loc.name && loc.id && (
                             <>
+                                {loc.image_url && (
+                                    <img
+                                        src={loc.image_url}
+                                        alt={loc.name}
+                                        className={styles.locationImage}
+                                    />
+                                )}
                                 <h3><Link to={`/place/${loc.id}`}>{loc.name}</Link></h3>
                                 <p>{loc.short_description}</p>
                             </>
