@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 
-function UserLocation() {
+export default function useUserLocation() {
     const [location, setLocation] = useState(null);
     const [error, setError] = useState(null);
 
@@ -18,20 +18,10 @@ function UserLocation() {
                 }
             );
         } else {
-            setError("Geolocation is not supported by your browser.");
+            setError("Geolocation wird vom Browser nicht unterstützt.");
         }
     }, []);
 
-    if (error) return <p>Fehler: {error}</p>;
-    if (!location) return <p>Standort wird geladen...</p>;
-
-    return (
-        <div>
-            <h3>Dein Standort:</h3>
-            <p>Breitengrad: {location.lat}</p>
-            <p>Längengrad: {location.lng}</p>
-        </div>
-    );
+    return { location, error };
 }
 
-export default UserLocation;

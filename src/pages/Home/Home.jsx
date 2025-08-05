@@ -4,7 +4,6 @@ import Trailer from "../../assets/trailer.mp4"
 import { Link } from "react-router-dom";
 import React, {useEffect, useState} from "react";
 import {supabase} from "../../Backend/supabaseClient";
-import UserLocation from "../../components/UserLocation";
 
 function Home() {
     const [locations, setLocations] = useState([]);
@@ -41,7 +40,6 @@ function Home() {
     return (
         <div className="App">
             <Navbar />
-            <UserLocation />
             <div className={styles.videoContainer}>
                 <video autoPlay loop muted playsInline>
                     <source src={Trailer} type="video/mp4"/>

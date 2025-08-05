@@ -3,11 +3,14 @@ import Navbar from "../../components/Navbar/Navbar";
 import MapBox from "../../components/MapBox/MapBox";
 import styles from "./map.module.css";
 import { supabase } from "../../Backend/supabaseClient";
+import { useUserLocationContext } from "../../context/UserLocationContext";
 
 export default function Map() {
     const [markers, setMarkers] = useState([]);
     const [categories, setCategories] = useState([]);
     const [loading, setLoading] = useState(true);
+    const { location: userLocation, error } = useUserLocationContext();
+
 
     useEffect(() => {
         async function fetchData() {
@@ -38,6 +41,19 @@ export default function Map() {
                         category: loc.category_name || "Unbekannt"
                     }));
 
+                if (
+                    userLocation &&
+                    typeof userLocation.lat === "number" &&
+                    typeof userLocation.lng === "number"
+                ) {
+                    transformed.push({
+                        id: "user",
+                        name: "Dein Standort",
+                        coordinates: [userLocation.lat, userLocation.lng],
+                        description: "Dein aktueller Standort",
+                        category: "User"
+                    });
+                }
 
 
                 setMarkers(transformed);
@@ -59,7 +75,7 @@ export default function Map() {
         }
 
         fetchData();
-    }, []);
+    }, [userLocation]);
 
     if (loading) return <p>⏳ Lädt Karte...</p>;
 
