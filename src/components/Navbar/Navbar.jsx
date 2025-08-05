@@ -1,7 +1,5 @@
 import styles from './Navbar.module.css';
 import {Link} from "react-router-dom";
-
-import logo from "../../assets/logo.png";
 import account from "../../assets/account.svg"
 import search from "../../assets/search.svg"
 
@@ -16,7 +14,7 @@ function Navbar ()  {
             </ul>
 
             <Link to="/" className={styles.logoLink} aria-label="Startseite">
-                <img src={logo} alt="Logo" className={styles.logo} />
+                <img src={"https://res.cloudinary.com/dgfycfxe1/image/upload/v1754420389/trailblaze_red_logo2_xlecjf.png"} alt="Logo" className={styles.logo} />
             </Link>
 
             <ul className={`${styles.navLinks} ${styles.navLinksRight}`}>

@@ -1,4 +1,4 @@
-import AdminNavbar from "../../components/AdminNavbar/AdminNavbar";
+import Navbar from "../../../components/Navbar/Navbar";
 import { useEffect, useState } from "react";
 import styles from "./EditCategories.module.css";
 import { supabase } from "../../../Backend/supabaseClient";
@@ -87,7 +87,7 @@ export default function EditCategories() {
 
     return (
         <div>
-            <AdminNavbar />
+            <Navbar/>
             <div className={styles.container}>
                 <div className={styles.input}>
                     <form onSubmit={handleSubmit} style={{display: 'flex', flexDirection: 'column', gap: '1rem'}}>
