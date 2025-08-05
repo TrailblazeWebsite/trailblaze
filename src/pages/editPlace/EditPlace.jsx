@@ -1,12 +1,13 @@
-import Navbar from "../../../components/Navbar/Navbar";
+import Navbar from "../../components/Navbar/Navbar";
 import {useEffect, useState} from "react";
-import styles from "./EditLocations.module.css"
+import styles from "./EditPlace.module.css"
+import Place from "../Place/Place";
 import PlaceDummy from "../../components/PlaceDummy/PlaceDummy";
-import { supabase } from "../../../Backend/supabaseClient";
+import { supabase } from "../../Backend/supabaseClient";
 
 
 
-export default function EditLocations() {
+export default function EditPlace() {
     const [locations, setLocations] = useState([]);
     const [selectedId, setSelectedId] = useState(null);
     const [categories, setCategories] = useState([])
@@ -287,7 +288,7 @@ export default function EditLocations() {
                     {message && <p>{message}</p>}
                 </div>
                 <div className={styles.pagePreview}>
-                    <PlaceDummy/>
+                    <PlaceDummy />
                 </div>
             </div>
         </div>

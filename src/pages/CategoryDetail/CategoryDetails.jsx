@@ -3,6 +3,7 @@ import styles from "./CategoryDetails.module.css"
 import { supabase } from "../../Backend/supabaseClient";
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
+import MapBox from "../../components/MapBox/MapBox";
 
 
 export default function CategoryDetails() {
@@ -56,19 +57,20 @@ export default function CategoryDetails() {
     return (
         <div>
             <Navbar />
-            <div className={styles.categories}>
-                <div className={styles.category}>
+            <div>
+                <div className={styles.categoryDetails}>
                     <div>
                         <h1>{category.name}</h1>
                         <p>{category.description}</p>
+                        {category.image_url && (
+                            <img src={category.image_url} alt={category.name} className={styles.categoriesImage} />
+                        )}
                     </div>
-                    {category.image_url && (
-                        <img src={category.image_url} alt={category.name} className={styles.categoriesImage} />
-                    )}
+                    <MapBox className={styles.map}/>
                 </div>
-                <div className={styles.locationList}>
+                <div className={styles.placeList}>
                     {locations.map(loc => (
-                        <div key={loc.id} className={styles.locationItem}>
+                        <div key={loc.id} className={styles.place}>
                             <h3><Link to={`/place/${loc.id}`}>{loc.name}</Link></h3>
                             <p>{loc.short_description}</p>
                             <img src={loc.image_url} alt={category.name} className={styles.categoriesImage}/>

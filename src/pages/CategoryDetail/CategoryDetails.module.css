@@ -7,11 +7,24 @@
     gap: 2rem;
 }
 
-.category {
-    width: 100%;
-    height: auto;
+.categoryDetails {
     display: grid;
+    gap: 1rem;
     grid-template-columns: 1fr 2fr;
+}
+
+.map {
+    border-radius: 1rem;
+}
+
+.placeList {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 2rem;
+}
+
+.place {
+
 }
 
 .categoriesImage {
@@ -21,3 +34,4 @@
     object-fit: cover;
     border-radius: 1rem;
 }
+

@@ -6,12 +6,24 @@ import { Link, useParams } from "react-router-dom";
 import { supabase } from "../../Backend/supabaseClient";
 import { useEffect, useState } from "react";
 
-export default function Place() {
+export default function Place({ initialPlace = null}) {
     const { id } = useParams();
     const [place, setPlace] = useState(null);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
+        if (initialPlace) {
+            // Wenn initialPlace vorhanden, kein Laden notwendig
+            setLoading(false);
+            return;
+        }
+
+        if (!id) {
+            // Falls weder id noch initialPlace vorhanden -> kein Laden möglich
+            setLoading(false);
+            setPlace(null);
+            return;
+        }
         const fetchPlace = async () => {
             const { data: placeData, error } = await supabase
                 .rpc("get_location_with_geojson", { loc_id: parseInt(id, 10) })
@@ -36,7 +48,7 @@ export default function Place() {
                     .single();
 
                 if (!categoryError && categoryData) {
-                    placeData.category = categoryData; // category.name verfügbar
+                    placeData.category = categoryData;
                 }
             }
 

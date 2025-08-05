@@ -1,8 +1,8 @@
-import Navbar from "../../../components/Navbar/Navbar";
+import Navbar from "../../components/Navbar/Navbar";
 import { useEffect, useState } from "react";
 import styles from "./EditCategories.module.css";
-import { supabase } from "../../../Backend/supabaseClient";
-import Categories from "../../../pages/Categories/Categories";
+import { supabase } from "../../Backend/supabaseClient";
+import Categories from "../Categories/Categories";
 
 export default function EditCategories() {
     const [categories, setCategories] = useState([]);
@@ -11,17 +11,24 @@ export default function EditCategories() {
         description: '',
         image_url: ''
     });
-    const [selectedCategory, setSelectedCategory] = useState(null); // ← editing state
+    const [selectedCategoryId, setSelectedCategoryId] = useState('');
+    const [selectedCategory, setSelectedCategory] = useState(null);
     const [message, setMessage] = useState(null);
+    const [refreshCounter, setRefreshCounter] = useState(0);
 
     const fetchCategories = async () => {
-        const { data, error } = await supabase.from("categories").select();
+        const { data, error } = await supabase
+            .from("categories")
+            .select()
+            .order('name', { ascending: true });
         if (error) {
             console.error("Fehler beim Laden der Kategorien:", error.message);
         } else {
             setCategories(data);
+            setRefreshCounter(prev => prev + 1); // erhöht den Counter nach jedem Laden
         }
     };
+
 
     useEffect(() => {
         fetchCategories();
@@ -53,7 +60,6 @@ export default function EditCategories() {
 
         let result;
         if (selectedCategory) {
-            // UPDATE existing entry
             result = await supabase
                 .from('categories')
                 .update({
@@ -61,7 +67,8 @@ export default function EditCategories() {
                     description: formData.description,
                     image_url: formData.image_url
                 })
-                .eq('id', selectedCategory.id);
+                .eq('id', selectedCategory.id)
+
         } else {
             // INSERT new entry
             result = await supabase
@@ -81,28 +88,66 @@ export default function EditCategories() {
             setMessage(selectedCategory ? '✅ Eintrag aktualisiert!' : '✅ Eintrag erstellt!');
             setFormData({ name: '', description: '', image_url: '' });
             setSelectedCategory(null);
+            setSelectedCategoryId("");
             await fetchCategories();
         }
     };
 
     return (
         <div>
-            <Navbar/>
+            <Navbar />
             <div className={styles.container}>
                 <div className={styles.input}>
-                    <form onSubmit={handleSubmit} style={{display: 'flex', flexDirection: 'column', gap: '1rem'}}>
+                    <select
+                        value={selectedCategoryId}
+                        onChange={(e) => {
+                            const id = e.target.value;
+                            setSelectedCategoryId(id);
+
+                            if (id === "") {
+                                setFormData({
+                                    name: '',
+                                    description: '',
+                                    image_url: ''
+                                });
+                                setSelectedCategory(null);
+                            } else {
+                                const selected = categories.find(cat => cat.id === parseInt(id));
+                                if (selected) {
+                                    setFormData({
+                                        name: selected.name || '',
+                                        description: selected.description || '',
+                                        image_url: selected.image_url || ''
+                                    });
+                                    setSelectedCategory(selected);
+                                }
+                            }
+                        }}
+                    >
+                        <option value="">➕ Neue Kategorie erstellen</option>
+                        {categories.map((cat) => (
+                            <option key={cat.id} value={cat.id}>
+                                ✏️ {cat.name}
+                            </option>
+                        ))}
+                    </select>
+
+                    <form
+                        onSubmit={handleSubmit}
+                        style={{display: 'flex', flexDirection: 'column', gap: '1rem'}}
+                    >
                         <input
                             name="name"
                             value={formData.name}
                             onChange={handleChange}
-                            placeholder="Name of category"
+                            placeholder="Name der Kategorie"
                             required
                         />
                         <textarea
                             name="description"
                             value={formData.description}
                             onChange={handleChange}
-                            placeholder="Description"
+                            placeholder="Beschreibung"
                         />
                         <input
                             name="image_url"
@@ -110,32 +155,28 @@ export default function EditCategories() {
                             onChange={handleChange}
                             placeholder="Bild-URL"
                         />
-                        <button type="submit">{selectedCategory ? 'Aktualisieren' : 'Speichern'}</button>
+                        <button type="submit">
+                            {selectedCategory ? 'Aktualisieren' : 'Speichern'}
+                        </button>
                         {selectedCategory && (
-                            <button type="button" onClick={handleCancelEdit} style={{backgroundColor: '#ccc'}}>
+                            <button
+                                type="button"
+                                onClick={handleCancelEdit}
+                                style={{backgroundColor: '#ccc'}}
+                            >
                                 Abbrechen
                             </button>
                         )}
                     </form>
-                    {message && <p>{message}</p>}
 
-                    <div>
-                        <h3>Kategorien</h3>
-                        <ul style={{listStyle: "none", padding: 0}}>
-                            {categories.map((cat) => (
-                                <li key={cat.id} style={{marginBottom: "1rem", borderBottom: "1px solid #eee"}}>
-                                    <strong>{cat.name}</strong>
-                                    <br/>
-                                    <button onClick={() => handleEdit(cat)}>Bearbeiten</button>
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
+                    {message && <p>{message}</p>}
                 </div>
+
                 <div className={styles.pagePreview}>
-                    <Categories/>
+                    <Categories key={refreshCounter} />
                 </div>
             </div>
         </div>
     );
+
 }
