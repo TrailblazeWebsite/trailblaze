@@ -150,7 +150,6 @@ export default function EditPlace() {
 
     return (
         <div>
-            <Navbar/>
             <div className={styles.container}>
                 <div className={styles.input}>
                     <form onSubmit={handleSubmit} style={{display: 'flex', flexDirection: 'column', gap: '1rem'}}>

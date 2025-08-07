@@ -81,7 +81,6 @@ export default function Map() {
 
     return (
         <div>
-            <Navbar />
             <div className={styles.mapContainer}>
                 <MapBox markers={markers} categories={categories} />
             </div>

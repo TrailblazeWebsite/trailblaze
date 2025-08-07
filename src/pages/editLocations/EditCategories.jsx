@@ -95,7 +95,6 @@ export default function EditCategories() {
 
     return (
         <div>
-            <Navbar />
             <div className={styles.container}>
                 <div className={styles.input}>
                     <select

@@ -70,7 +70,6 @@ export default function Place({ initialPlace = null}) {
 
     return (
         <div>
-            <Navbar />
             <div className={styles.place}>
                 <div className={styles.topContainer}>
                     <div>

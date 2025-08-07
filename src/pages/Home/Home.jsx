@@ -39,7 +39,6 @@ function Home() {
 
     return (
         <div className="App">
-            <Navbar />
             <div className={styles.videoContainer}>
                 <video autoPlay loop muted playsInline>
                     <source src={Trailer} type="video/mp4"/>

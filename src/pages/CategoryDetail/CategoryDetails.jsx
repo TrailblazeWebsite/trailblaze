@@ -56,7 +56,6 @@ export default function CategoryDetails() {
 
     return (
         <div>
-            <Navbar />
             <div>
                 <div className={styles.categoryDetails}>
                     <div>

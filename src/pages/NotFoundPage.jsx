@@ -4,7 +4,6 @@ import Navbar from "../components/Navbar/Navbar.jsx";
 function NotFoundPage() {
     return (
         <div className="App">
-            <Navbar />
             <header className="App-header">
                 <img src={logo} className="App-logo" alt="logo" />
                 <p>

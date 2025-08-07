@@ -31,7 +31,6 @@ export default function Categories() {
 
     return (
         <div>
-            <Navbar />
             <div className={styles.categories}>
                 {categories.map(cat => (
                     <div key={cat.id} className={styles.category}>

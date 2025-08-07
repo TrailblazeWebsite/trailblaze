@@ -5,7 +5,6 @@ import styles from "./About.module.css"
 function About() {
     return (
         <div>
-            <Navbar/>
             <div>
                 <div className={styles.imgWrapper}>
                     <img src={'https://res.cloudinary.com/dgfycfxe1/image/upload/v1754151712/cld-sample-2.jpg'} alt="Image" className={styles.image}/>

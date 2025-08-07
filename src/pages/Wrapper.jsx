@@ -1,6 +1,8 @@
 import React, {useEffect, useState} from "react";
 import {supabase} from "../Backend/supabaseClient";
 import { Navigate} from "react-router-dom";
+import Navbar from "../components/Navbar/Navbar";
+
 
 function Wrapper ({ children }) {
     const [authenticated, setAuthenticated] = useState(false);
@@ -21,7 +23,14 @@ function Wrapper ({ children }) {
         return <div>Loading</div>
     } else {
         if (authenticated) {
-            return <>{children}</>;
+            return (
+                <>
+                    <Navbar />
+                    <div className={"main-content"}>
+                        {children}
+                    </div>
+                </>
+            );
         }
         return <Navigate to="/login" />
     }
