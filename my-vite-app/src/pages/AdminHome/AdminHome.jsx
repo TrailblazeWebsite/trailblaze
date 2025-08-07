@@ -8,6 +8,8 @@ function AdminHome() {
             <div>
                 <li><Link to="/addPlace"> Edit Locations </Link></li>
                 <li><Link to="/editCategories"> Edit Categories </Link></li>
+                <li><Link to="/login"> Login</Link></li>
+                <li><Link to="/register"> Register </Link></li>
             </div>
         </div>
     )
