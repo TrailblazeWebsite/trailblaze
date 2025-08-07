@@ -14,8 +14,8 @@ import NotFoundPage from "./pages/NotFoundPage.jsx";
 import AdminHome from "./pages/AdminHome/AdminHome.jsx";
 import EditCategories from "./pages/editLocations/EditCategories.jsx";
 import CategoryDetails from "./pages/CategoryDetail/CategoryDetails.jsx";
-import Login from "./pages/Login";
-import Register from "./pages/Register";
+import Login from "./pages/Login/Login";
+import Register from "./pages/Register/Register";
 
 export const router = createBrowserRouter([
     {

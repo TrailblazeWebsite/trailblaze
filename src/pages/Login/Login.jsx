@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
-import {supabase} from "../Backend/supabaseClient";
+import {supabase} from "../../Backend/supabaseClient";
 import {Link, useNavigate} from "react-router-dom";
+import styles from "./Login.module.css";
+
 
 function Login() {
     const navigate = useNavigate();
@@ -30,11 +32,12 @@ function Login() {
     };
 
     return (
-        <div>
-            <h2>Login</h2>
+        <div className={styles["wrapper"]}>
+            <img src={"https://res.cloudinary.com/dgfycfxe1/image/upload/v1754420389/trailblaze_red_logo2_xlecjf.png"} alt="Logo" className={styles["responsive-img"]}/>
+            <h1>Login</h1>
             <br></br>
             {message && <span>{message}</span>}
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit} className={styles["form"]}>
                 <input
                     onChange={(e) => setEmail(e.target.value)}
                     value={email}
@@ -42,6 +45,7 @@ function Login() {
                     placeholder="Email"
                     required
                 />
+                <br/>
                 <input
                     onChange={(e) => setPassword(e.target.value)}
                     value={password}
@@ -49,6 +53,7 @@ function Login() {
                     placeholder="Password"
                     required
                 />
+                <br/>
                 <button type="submit">Log in</button>
             </form>
             <span>Don't have an account?</span>

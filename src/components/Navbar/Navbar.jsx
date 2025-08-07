@@ -2,6 +2,10 @@ import styles from './Navbar.module.css';
 import {Link} from "react-router-dom";
 import account from "../../assets/account.svg"
 import search from "../../assets/search.svg"
+import React from 'react';
+import LogoutButton from "../LogoutButton";
+
+
 
 function Navbar ()  {
     return (
@@ -18,12 +22,16 @@ function Navbar ()  {
             </Link>
 
             <ul className={`${styles.navLinks} ${styles.navLinksRight}`}>
-                <li><Link to="/">
+                <li>
+                    <Link to="/">
                     <img src={search} alt="Search" className={styles.icons}/>
-                </Link></li>
-                <li><Link to="/adminHome">
+                    </Link></li>
+                <li>
+                    <Link to="/adminHome">
                     <img src={account} alt="Account" className={styles.icons}/>
-                </Link></li>
+                    </Link>
+                </li>
+                <LogoutButton />
             </ul>
         </nav>
     )

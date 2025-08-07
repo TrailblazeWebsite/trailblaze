@@ -1,0 +1,13 @@
+.wrapper {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 16px;
+    box-sizing: border-box;
+    text-align: center;
+}
+
+
+
+.form {
+    row-gap: 2rem;
+}
