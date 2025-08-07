@@ -55,6 +55,7 @@ function Login() {
             <br/>
             <Link to="/register">Register</Link>
         </div>
+
     );
 }
 
