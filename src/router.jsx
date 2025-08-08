@@ -16,6 +16,8 @@ import EditCategories from "./pages/editLocations/EditCategories.jsx";
 import CategoryDetails from "./pages/CategoryDetail/CategoryDetails.jsx";
 import Login from "./pages/Login/Login";
 import Register from "./pages/Register/Register";
+import ManageUser from "./pages/ManageUser/ManageUser";
+import RequireAdmin from "./components/RequireAdmin";
 
 export const router = createBrowserRouter([
     {
@@ -35,11 +37,34 @@ export const router = createBrowserRouter([
             { path: "place/:id", element: <Place /> },
             { path: "places", element: <Places /> },
             { path: "map", element: <Map /> },
-            { path: "addPlace", element: <EditPlace /> },
-            { path: "adminHome", element: <AdminHome /> },
-            { path: "editCategories", element: <EditCategories /> },
             { path: "categories/:id", element: <CategoryDetails /> },
             { path: "*", element: <NotFoundPage /> },
+            //Admin routes
+            { path: "addPlace", element: (
+                <RequireAdmin>
+                    <EditPlace />
+                </RequireAdmin>
+                ),
+            },
+            { path: "adminHome", element: (
+                <RequireAdmin>
+                    <AdminHome />
+                </RequireAdmin>
+                ),
+            },
+            { path: "editCategories", element: (
+                <RequireAdmin>
+                    <EditCategories />
+                </RequireAdmin>
+
+                ),
+            },
+            { path: "manageUser", element: (
+                <RequireAdmin>
+                    <ManageUser />
+                </RequireAdmin>
+                ),
+            },
         ],
     },
 ]);

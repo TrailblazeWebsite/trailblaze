@@ -2,9 +2,12 @@ import styles from './Navbar.module.css';
 import { Link } from "react-router-dom";
 import React, { useState } from 'react';
 import LogoutButton from "../LogoutButton";
+import { useAuth } from "../../context/AuthContext";
 
 function Navbar() {
     const [menuOpen, setMenuOpen] = useState(false);
+    const { profile } = useAuth();
+
 
     return (
         <nav className={styles.navbar}>
@@ -23,7 +26,9 @@ function Navbar() {
                 <li className={styles.desktopOnly}><Link to="/places"> Categories </Link></li>
                 <li className={styles.desktopOnly}><Link to="/map"> Map </Link></li>
                 <li className={styles.desktopOnly}><Link to="/about"> About </Link></li>
-                <li className={styles.desktopOnly}><Link to="/adminHome"> Admin </Link></li>
+                {profile?.role === "admin" && (
+                    <Link to="/adminHome" onClick={() => setMenuOpen(false)}>Admin</Link>
+                )}
             </ul>
 
             {/* Logo */}
@@ -47,7 +52,9 @@ function Navbar() {
                     <Link to="/places" onClick={() => setMenuOpen(false)}>Categories</Link>
                     <Link to="/map" onClick={() => setMenuOpen(false)}>Map</Link>
                     <Link to="/about" onClick={() => setMenuOpen(false)}>About</Link>
-                    <Link to="/adminHome" onClick={() => setMenuOpen(false)}>Admin </Link>
+                    {profile?.role === "admin" && (
+                        <Link to="/adminHome" onClick={() => setMenuOpen(false)}>Admin</Link>
+                    )}
                 </div>
             )}
         </nav>

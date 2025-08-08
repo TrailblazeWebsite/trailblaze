@@ -1,7 +1,5 @@
-import Navbar from "../../components/Navbar/Navbar.jsx";
 import {useEffect, useState} from "react";
 import styles from "./EditPlace.module.css"
-import PlaceDummy from "../../components/PlaceDummy/PlaceDummy.jsx";
 import { supabase } from "../../Backend/supabaseClient.js";
 
 
@@ -284,7 +282,7 @@ export default function EditPlace() {
                     {message && <p>{message}</p>}
                 </div>
                 <div className={styles.pagePreview}>
-                    <PlaceDummy />
+
                 </div>
             </div>
         </div>

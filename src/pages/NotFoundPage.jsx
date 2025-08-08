@@ -1,5 +1,4 @@
-import logo from "../assets/logo.svg";
-import Navbar from "../components/Navbar/Navbar.jsx";
+
 
 function NotFoundPage() {
     return (
