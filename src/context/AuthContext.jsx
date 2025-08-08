@@ -9,31 +9,49 @@ export function AuthProvider({ children }) {
     const [loading, setLoading] = useState(true);
 
     const loadUser = async () => {
-        const { data: { user } } = await supabase.auth.getUser();
-        if (!user) {
+        const {
+            data: { user },
+            error: userError,
+        } = await supabase.auth.getUser();
+
+        if (!user || userError) {
             setUser(null);
             setProfile(null);
             setLoading(false);
             return;
         }
 
-        const { data: profileData } = await supabase
+        const { data: profileData, error: profileError } = await supabase
             .from("profiles")
             .select("*")
             .eq("id", user.id)
             .single();
 
+        if (profileError) {
+            console.error("Failed to fetch profile:", profileError);
+            setProfile(null);
+        } else {
+            console.log("Loaded profile:", profileData);
+            setProfile(profileData);
+        }
+
         setUser(user);
-        setProfile(profileData);
         setLoading(false);
     };
 
+
     useEffect(() => {
         loadUser();
-        const { data: listener } = supabase.auth.onAuthStateChange(() => {
+
+        const { data } = supabase.auth.onAuthStateChange(() => {
             loadUser();
         });
-        return () => listener.subscription.unsubscribe();
+
+        return () => {
+            if (data?.subscription?.unsubscribe) {
+                data.subscription.unsubscribe();
+            }
+        }
     }, []);
 
     return (

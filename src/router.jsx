@@ -16,7 +16,7 @@ import EditCategories from "./pages/editLocations/EditCategories.jsx";
 import CategoryDetails from "./pages/CategoryDetail/CategoryDetails.jsx";
 import Login from "./pages/Login/Login";
 import Register from "./pages/Register/Register";
-import ManageUser from "./pages/ManageUser/ManageUser";
+import ManageUser from "./pages/ManageUser/ManageUsers";
 import RequireAdmin from "./components/RequireAdmin";
 
 export const router = createBrowserRouter([

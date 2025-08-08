@@ -7,7 +7,6 @@ function Wrapper({ children }) {
             <div className="main-content">{children}</div>
         </>
     );
-
 }
 
 export default Wrapper;
