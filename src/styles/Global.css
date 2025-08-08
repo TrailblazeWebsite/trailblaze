@@ -62,5 +62,7 @@ html {
 }
 
 .main-content {
-  padding-top: 100px; /* match navbar height */
+  padding-top: 20px;
+  width: 95%;
+  margin: 0 auto;
 }

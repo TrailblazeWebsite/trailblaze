@@ -71,11 +71,6 @@
     padding: 0;
 }
 
-.menuButton img {
-    height: 24px;
-    width: 24px;
-}
-
 /* Mobile menu dropdown */
 .mobileMenu {
     position: absolute;

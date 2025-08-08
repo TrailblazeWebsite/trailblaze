@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import {supabase} from "../../Backend/supabaseClient";
 import {Link, useNavigate} from "react-router-dom";
+import styles from "./Register.module.css";
 
 function Register() {
     const navigate = useNavigate();
@@ -30,11 +31,12 @@ function Register() {
     };
 
     return (
-        <div>
+        <div className={styles.wrapper}>
+            <img src={"https://res.cloudinary.com/dgfycfxe1/image/upload/v1754420389/trailblaze_red_logo2_xlecjf.png"} alt="Logo" className={styles["responsive-img"]}/>
             <h2>Register</h2>
             <br></br>
             {message && <span>{message}</span>}
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit} className={styles.form}>
                 <input
                     onChange={(e) => setEmail(e.target.value)}
                     value={email}

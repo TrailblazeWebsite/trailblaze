@@ -40,7 +40,7 @@ function Navbar() {
             <ul className={`${styles.navLinks} ${styles.navLinksRight}`}>
                 <li><Link to="/"><img src={search} alt="Search" className={styles.icons}/></Link></li>
                 <li><Link to="/adminHome"><img src={account} alt="Account" className={styles.icons}/></Link></li>
-                <LogoutButton />
+                <li><LogoutButton /></li>
             </ul>
 
             {/* Mobile menu dropdown */}
