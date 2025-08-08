@@ -66,3 +66,7 @@ html {
   width: 95%;
   margin: 0 auto;
 }
+
+input, textarea, select, button {
+  font-size: 16px;
+}

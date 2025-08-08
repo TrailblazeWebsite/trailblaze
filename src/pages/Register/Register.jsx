@@ -33,10 +33,10 @@ function Register() {
     return (
         <div className={styles.wrapper}>
             <img src={"https://res.cloudinary.com/dgfycfxe1/image/upload/v1754420389/trailblaze_red_logo2_xlecjf.png"} alt="Logo" className={styles["responsive-img"]}/>
-            <h2>Register</h2>
+            <h1>Register</h1>
             <br></br>
             {message && <span>{message}</span>}
-            <form onSubmit={handleSubmit} className={styles.form}>
+            <form onSubmit={handleSubmit} className={styles["form"]}>
                 <input
                     onChange={(e) => setEmail(e.target.value)}
                     value={email}
@@ -44,6 +44,7 @@ function Register() {
                     placeholder="Email"
                     required
                 />
+                <br/>
                 <input
                     onChange={(e) => setPassword(e.target.value)}
                     value={password}
@@ -51,6 +52,7 @@ function Register() {
                     placeholder="Password"
                     required
                 />
+                <br/>
                 <button type="submit">Create Account</button>
             </form>
             <span>Already have an Account?</span>
