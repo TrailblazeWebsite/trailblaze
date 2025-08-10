@@ -1,5 +1,4 @@
 import styles from "./Home.module.css"
-import Navbar from "../../components/Navbar/Navbar.jsx";
 import Trailer from "../../assets/trailer.mp4"
 import { Link } from "react-router-dom";
 import React, {useEffect, useState} from "react";
@@ -59,7 +58,7 @@ function Home() {
                                         className={styles.locationImage}
                                     />
                                 )}
-                                <h3><Link to={`/place/${loc.id}`}>{loc.name}</Link></h3>
+                                <h3><Link to={`/place/${loc.slug}`}>{loc.name}</Link></h3>
                                 <p>{loc.short_description}</p>
                             </>
                         )}

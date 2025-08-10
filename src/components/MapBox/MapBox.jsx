@@ -32,7 +32,7 @@ export default function MapBox({
             <Popup>
                 <h3>{m.name}</h3>
                 <h4>{m.description}</h4>
-                {m.id && <h3><Link to={`/place/${m.id}`}>{m.name}</Link></h3>}
+                {m.id && <h3><Link to={`/place/${m.slug}`}>{m.name}</Link></h3>}
             </Popup>
         </Marker>
     );

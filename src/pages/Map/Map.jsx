@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import Navbar from "../../components/Navbar/Navbar.jsx";
 import MapBox from "../../components/MapBox/MapBox.jsx";
 import styles from "./map.module.css";
 import { supabase } from "../../Backend/supabaseClient.js";
@@ -38,7 +37,8 @@ export default function Map() {
                         name: loc.name,
                         coordinates: [loc.coordinates.coordinates[1], loc.coordinates.coordinates[0]],
                         description: loc.short_description,
-                        category: loc.category_name || "Unbekannt"
+                        category: loc.category_name || "Unbekannt",
+                        slug: loc.slug
                     }));
 
                 if (

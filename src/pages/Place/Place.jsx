@@ -1,38 +1,33 @@
+// src/pages/Place/Place.jsx
 import styles from "./Place.module.css";
 import googleMapsImage from "../../assets/GoogleMaps.png";
 import Map from "../../components/MapBox/MapBox.jsx";
-import Navbar from "../../components/Navbar/Navbar.jsx";
 import { Link, useParams } from "react-router-dom";
 import { supabase } from "../../Backend/supabaseClient.js";
 import { useEffect, useState } from "react";
 
-export default function Place({ initialPlace = null}) {
-    const { id } = useParams();
+export default function Place({ initialPlace = null }) {
+    const { slug } = useParams(); // slug from the URL
     const [place, setPlace] = useState(null);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         if (initialPlace) {
-            // Wenn initialPlace vorhanden, kein Laden notwendig
+            setPlace(initialPlace);
             setLoading(false);
             return;
         }
 
-        if (!id) {
-            // Falls weder id noch initialPlace vorhanden -> kein Laden möglich
-            setLoading(false);
+        if (!slug) {
             setPlace(null);
+            setLoading(false);
             return;
         }
+
         const fetchPlace = async () => {
             const { data: placeData, error } = await supabase
-                .rpc("get_location_with_geojson", { loc_id: parseInt(id, 10) })
+                .rpc("get_location_with_geojson_by_slug", { p_slug: slug }) // pass slug directly
                 .single();
-
-            if (placeData.coordinates?.coordinates) {
-                placeData.coordinates = placeData.coordinates.coordinates;
-            }
-
 
             if (error || !placeData) {
                 console.error("Fehler beim Laden:", error);
@@ -40,16 +35,11 @@ export default function Place({ initialPlace = null}) {
                 return;
             }
 
-            if (placeData.category_id) {
-                const { data: categoryData, error: categoryError } = await supabase
-                    .from("categories")
-                    .select("name")
-                    .eq("id", placeData.category_id)
-                    .single();
-
-                if (!categoryError && categoryData) {
-                    placeData.category = categoryData;
-                }
+            // Normalize GeoJSON to plain [lng, lat]
+            if (placeData?.coordinates?.coordinates) {
+                placeData.coordinates = placeData.coordinates.coordinates;
+            } else {
+                placeData.coordinates = null;
             }
 
             setPlace(placeData);
@@ -57,7 +47,7 @@ export default function Place({ initialPlace = null}) {
         };
 
         fetchPlace();
-    }, [id]);
+    }, [slug, initialPlace]);
 
     if (loading) return <div>⏳ Lädt...</div>;
     if (!place) return <div>❌ Ort nicht gefunden</div>;
@@ -66,20 +56,20 @@ export default function Place({ initialPlace = null}) {
         ? `https://www.google.com/maps/search/?api=1&query=${place.coordinates[1]},${place.coordinates[0]}`
         : "#";
 
-
-
     return (
         <div>
             <div className={styles.place}>
                 <div className={styles.topContainer}>
                     <div>
                         <h1>{place.name}</h1>
-                        {place.category && (
+                        {place.category_name && (
                             <h3>
-                                <Link to={`/categories/${place.category_id}`}>{place.category?.name}</Link>
+                                <Link to={`/categories/${place.category_slug}`}>
+                                    {place.category_name}
+                                </Link>
                             </h3>
                         )}
-                        <p>{place.description}</p>
+                        <p>{place.description}</p>s
                     </div>
                     <div className={styles.imgWrapper}>
                         <img
@@ -107,17 +97,19 @@ export default function Place({ initialPlace = null}) {
                                 </a>
                             )}
                         </div>
-                        <div>⭐ Bewertung: {place.rating}</div>
+                        <div>⭐ Bewertung: {place.rating ?? "Keine Bewertung"}</div>
                     </div>
 
-                    {place.coordinates && Array.isArray(place.coordinates) && place.coordinates.length === 2 ? (
+                    {place.coordinates &&
+                    Array.isArray(place.coordinates) &&
+                    place.coordinates.length === 2 ? (
                         <div className={styles.map}>
                             <Map
                                 markers={[{
                                     name: place.name,
-                                    coordinates:  [place.coordinates[1], place.coordinates[0]],
+                                    coordinates: [place.coordinates[1], place.coordinates[0]],
                                     description: place.short_description,
-                                    category: place.category.name
+                                    category: place.category_name
                                 }]}
                                 center={[place.coordinates[1], place.coordinates[0]]}
                             />

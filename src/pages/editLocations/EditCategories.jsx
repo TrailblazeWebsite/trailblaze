@@ -1,8 +1,17 @@
-import Navbar from "../../components/Navbar/Navbar.jsx";
 import { useEffect, useState } from "react";
 import styles from "./EditCategories.module.css";
 import { supabase } from "../../Backend/supabaseClient.js";
 import Categories from "../Categories/Categories.jsx";
+
+// Helper: slugify a string
+const slugify = (text) =>
+    text
+        .toString()
+        .toLowerCase()
+        .trim()
+        .replace(/\s+/g, '-')       // Replace spaces with -
+        .replace(/[^\w\-]+/g, '')   // Remove all non-word chars
+        .replace(/--+/g, '-');    // Replace multiple - with single -
 
 export default function EditCategories() {
     const [categories, setCategories] = useState([]);
@@ -25,10 +34,9 @@ export default function EditCategories() {
             console.error("Fehler beim Laden der Kategorien:", error.message);
         } else {
             setCategories(data);
-            setRefreshCounter(prev => prev + 1); // erhöht den Counter nach jedem Laden
+            setRefreshCounter(prev => prev + 1);
         }
     };
-
 
     useEffect(() => {
         fetchCategories();
@@ -39,16 +47,6 @@ export default function EditCategories() {
         setFormData((prev) => ({ ...prev, [name]: value }));
     };
 
-    const handleEdit = (category) => {
-        setFormData({
-            name: category.name,
-            description: category.description,
-            image_url: category.image_url
-        });
-        setSelectedCategory(category);
-        setMessage(null);
-    };
-
     const handleCancelEdit = () => {
         setFormData({ name: '', description: '', image_url: '' });
         setSelectedCategory(null);
@@ -57,31 +55,26 @@ export default function EditCategories() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        const payload = {
+            name: formData.name,
+            slug: slugify(formData.name),
+            description: formData.description,
+            image_url: formData.image_url
+        };
 
         let result;
         if (selectedCategory) {
             result = await supabase
                 .from('categories')
-                .update({
-                    name: formData.name,
-                    description: formData.description,
-                    image_url: formData.image_url
-                })
-                .eq('id', selectedCategory.id)
-
+                .update(payload)
+                .eq('id', selectedCategory.id);
         } else {
-            // INSERT new entry
             result = await supabase
                 .from('categories')
-                .insert([{
-                    name: formData.name,
-                    description: formData.description,
-                    image_url: formData.image_url
-                }]);
+                .insert([payload]);
         }
 
         const { error } = result;
-
         if (error) {
             setMessage(`❌ Fehler: ${error.message}`);
         } else {
@@ -102,14 +95,8 @@ export default function EditCategories() {
                         onChange={(e) => {
                             const id = e.target.value;
                             setSelectedCategoryId(id);
-
                             if (id === "") {
-                                setFormData({
-                                    name: '',
-                                    description: '',
-                                    image_url: ''
-                                });
-                                setSelectedCategory(null);
+                                handleCancelEdit();
                             } else {
                                 const selected = categories.find(cat => cat.id === parseInt(id));
                                 if (selected) {
@@ -131,10 +118,7 @@ export default function EditCategories() {
                         ))}
                     </select>
 
-                    <form
-                        onSubmit={handleSubmit}
-                        style={{display: 'flex', flexDirection: 'column', gap: '1rem'}}
-                    >
+                    <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                         <input
                             name="name"
                             value={formData.name}
@@ -158,11 +142,7 @@ export default function EditCategories() {
                             {selectedCategory ? 'Aktualisieren' : 'Speichern'}
                         </button>
                         {selectedCategory && (
-                            <button
-                                type="button"
-                                onClick={handleCancelEdit}
-                                style={{backgroundColor: '#ccc'}}
-                            >
+                            <button type="button" onClick={handleCancelEdit} style={{ backgroundColor: '#ccc' }}>
                                 Abbrechen
                             </button>
                         )}
@@ -177,5 +157,4 @@ export default function EditCategories() {
             </div>
         </div>
     );
-
 }

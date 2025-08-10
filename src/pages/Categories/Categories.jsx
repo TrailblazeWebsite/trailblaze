@@ -1,5 +1,4 @@
 import React from "react";
-import Navbar from "../../components/Navbar/Navbar.jsx";
 import styles from "./Categories.module.css";
 import { Link } from "react-router-dom";
 import { supabase } from "../../Backend/supabaseClient.js";
@@ -35,7 +34,7 @@ export default function Categories() {
                 {categories.map(cat => (
                     <div key={cat.id} className={styles.category}>
                         <div>
-                            <h2><Link to={`/categories/${cat.id}`}>{cat.name}</Link></h2>
+                            <h2><Link to={`/categories/${cat.slug}`}>{cat.name}</Link></h2>
                             <p>{cat.description}</p>
                         </div>
                         {cat.image_url && (

@@ -34,10 +34,10 @@ export const router = createBrowserRouter([
             { path: "home", element: <Home />},
             { path: "about", element: <About /> },
             { path: "register", element: <Register />},
-            { path: "place/:id", element: <Place /> },
+            { path: "place/:slug", element: <Place /> },
             { path: "places", element: <Places /> },
             { path: "map", element: <Map /> },
-            { path: "categories/:id", element: <CategoryDetails /> },
+            { path: "categories/:slug", element: <CategoryDetails /> },
             { path: "*", element: <NotFoundPage /> },
             //Admin routes
             { path: "addPlace", element: (
