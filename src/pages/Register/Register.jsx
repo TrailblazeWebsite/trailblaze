@@ -24,7 +24,7 @@ function Register() {
         }
         if (data) {
             setMessage("User account created!")
-            navigate("/login")
+            navigate("/pending-approval")
         }
         setEmail("");
         setPassword("");

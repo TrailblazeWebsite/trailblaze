@@ -4,6 +4,10 @@ import { createBrowserRouter } from "react-router-dom";
 import PublicLayout from "./layouts/PublicLayout";
 import ProtectedLayout from "./layouts/ProtectedLayout";
 
+import Login from "./pages/Login/Login";
+import Register from "./pages/Register/Register";
+import PendingApproval from "./pages/PendingApproval/PendingApproval"
+
 import Home from "./pages/Home/Home.jsx";
 import About from "./pages/About/About.jsx";
 import Map from "./pages/Map/Map.jsx";
@@ -14,10 +18,8 @@ import NotFoundPage from "./pages/NotFoundPage.jsx";
 import AdminHome from "./pages/AdminHome/AdminHome.jsx";
 import EditCategories from "./pages/editLocations/EditCategories.jsx";
 import CategoryDetails from "./pages/CategoryDetail/CategoryDetails.jsx";
-import Login from "./pages/Login/Login";
-import Register from "./pages/Register/Register";
 import ManageUser from "./pages/ManageUser/ManageUsers";
-import RequireAdmin from "./components/RequireAdmin";
+import RequireRole from "./components/RequireRole";
 
 export const router = createBrowserRouter([
     {
@@ -25,6 +27,7 @@ export const router = createBrowserRouter([
         children: [
             { path: "login", element: <Login />},
             { path: "register", element: <Register />},
+            { path: "pending-approval", element: <PendingApproval />},
         ],
     },
     {
@@ -41,28 +44,27 @@ export const router = createBrowserRouter([
             { path: "*", element: <NotFoundPage /> },
             //Admin routes
             { path: "addPlace", element: (
-                <RequireAdmin>
+                <RequireRole allowedRoles={["trailblazer", "ehren-member", "admin"]}>
                     <EditPlace />
-                </RequireAdmin>
+                </RequireRole>
                 ),
             },
             { path: "adminHome", element: (
-                <RequireAdmin>
+                <RequireRole allowedRoles={["trailblazer", "ehren-member", "admin"]}>
                     <AdminHome />
-                </RequireAdmin>
+                </RequireRole>
                 ),
             },
             { path: "editCategories", element: (
-                <RequireAdmin>
+                <RequireRole allowedRoles={["trailblazer", "ehren-member", "admin"]}>
                     <EditCategories />
-                </RequireAdmin>
-
+                </RequireRole>
                 ),
             },
             { path: "manageUser", element: (
-                <RequireAdmin>
+                <RequireRole allowedRoles={["admin"]}>
                     <ManageUser />
-                </RequireAdmin>
+                </RequireRole>
                 ),
             },
         ],
