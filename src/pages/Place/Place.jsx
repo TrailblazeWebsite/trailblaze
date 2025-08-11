@@ -74,7 +74,15 @@ export default function Place({ initialPlace = null }) {
                         )}
                         <p>{place.description}</p>s
                     </div>
-                    <Slideshow images={place.gallery_urls || ['https://res.cloudinary.com/dgfycfxe1/image/upload/v1754151712/cld-sample-2.jpg']} interval={3000}></Slideshow>
+                    <Slideshow
+                        media={
+                            Array.isArray(place.gallery_urls) && place.gallery_urls.length > 0
+                                ? place.gallery_urls
+                                : ["https://res.cloudinary.com/dgfycfxe1/image/upload/v1754151712/cld-sample-2.jpg"]
+                        }
+                        interval={3000}
+                    />
+
                 </div>
 
                 <div className={styles.bottomContainer}>

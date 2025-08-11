@@ -1,3 +1,4 @@
+// src/pages/Home/Home.jsx
 import styles from "./Home.module.css";
 import Trailer from "../../assets/trailer.mp4";
 import { Link } from "react-router-dom";
@@ -28,7 +29,7 @@ function Home() {
                 if (newestError) throw newestError;
                 setNewest(newestData);
 
-                // 2️⃣ Nearest Places (if we have user location)
+                // 2️⃣ Nearest Places
                 if (userLocation) {
                     const { data: nearestData, error: nearestError } = await supabase
                         .rpc("get_nearest_locations", {
@@ -67,15 +68,19 @@ function Home() {
     // Helper to render location grid
     const renderGrid = (places) => (
         <div className={styles.newPlacesContainer}>
-            {places.map(loc => (
-                <div key={loc.id} className={styles.locationItem}>
-                    {loc.image_url && (
-                        <img src={loc.image_url} alt={loc.name} className={styles.locationImage} />
-                    )}
-                    <h3><Link to={`/place/${loc.slug}`}>{loc.name}</Link></h3>
-                    <p>{loc.short_description}</p>
-                </div>
-            ))}
+            {places.map(loc => {
+                const imgSrc = loc.gallery_urls?.length
+                    ? loc.gallery_urls[0] // First image from gallery
+                    : "https://via.placeholder.com/300x200?text=No+Image";
+
+                return (
+                    <div key={loc.id} className={styles.locationItem}>
+                        <img src={imgSrc} alt={loc.name} className={styles.locationImage} />
+                        <h3><Link to={`/place/${loc.slug}`}>{loc.name}</Link></h3>
+                        <p>{loc.short_description}</p>
+                    </div>
+                );
+            })}
         </div>
     );
 
@@ -83,7 +88,7 @@ function Home() {
         <div className="App">
             <div className={styles.videoContainer}>
                 <video autoPlay loop muted playsInline>
-                    <source src={Trailer} type="video/mp4"/>
+                    <source src={Trailer} type="video/mp4" />
                 </video>
             </div>
 

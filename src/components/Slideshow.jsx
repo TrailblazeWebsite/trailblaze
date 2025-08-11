@@ -1,37 +1,43 @@
 import { useState, useEffect } from "react";
 
-export default function Slideshow({ images = [], interval = 3000 }) {
+export default function Slideshow({ media = [], interval = 3000 }) {
     const [current, setCurrent] = useState(0);
 
     useEffect(() => {
-        if (images.length === 0) return; // don't start autoplay yet
-
+        if (media.length === 0) return;
         const timer = setInterval(() => {
-            setCurrent((prev) => (prev + 1) % images.length);
+            setCurrent((prev) => (prev + 1) % media.length);
         }, interval);
-
         return () => clearInterval(timer);
-    }, [images, interval]);
+    }, [media, interval]);
 
-    if (!images || images.length === 0) {
+    if (!media || media.length === 0) {
         return <div className="text-center p-4">Loading slideshow...</div>;
     }
 
-    const prevSlide = () => {
-        setCurrent((prev) => (prev - 1 + images.length) % images.length);
-    };
+    const prevSlide = () => setCurrent((prev) => (prev - 1 + media.length) % media.length);
+    const nextSlide = () => setCurrent((prev) => (prev + 1) % media.length);
 
-    const nextSlide = () => {
-        setCurrent((prev) => (prev + 1) % images.length);
-    };
+    const currentUrl = media[current];
+    const isVideo = currentUrl?.toLowerCase().endsWith(".mp4");
 
     return (
         <div className="relative w-full max-w-2xl mx-auto overflow-hidden rounded-lg shadow-lg">
-            <img
-                src={images[current]}
-                alt={`Slide ${current + 1}`}
-                className="w-full h-64 object-cover transition-all duration-500"
-            />
+            {isVideo ? (
+                <video
+                    src={currentUrl}
+                    className="w-full h-64 object-cover"
+                    autoPlay
+                    muted
+                    loop
+                />
+            ) : (
+                <img
+                    src={currentUrl}
+                    alt={`Slide ${current + 1}`}
+                    className="w-full h-64 object-cover transition-all duration-500"
+                />
+            )}
 
             {/* Controls */}
             <button
@@ -49,7 +55,7 @@ export default function Slideshow({ images = [], interval = 3000 }) {
 
             {/* Dots */}
             <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
-                {images.map((_, i) => (
+                {media.map((_, i) => (
                     <span
                         key={i}
                         onClick={() => setCurrent(i)}

@@ -30,10 +30,17 @@ export default function CategoryDetails() {
             }
             setCategory(categoryData);
 
-            // 2️⃣ Fetch locations with coordinates
+            // 2️⃣ Fetch locations with coordinates and gallery
             const { data: locationsData, error: locError } = await supabase
                 .from("locations")
-                .select("id, name, short_description, image_url, slug, coordinates")
+                .select(`
+                    id,
+                    name,
+                    short_description,
+                    gallery_urls,
+                    slug,
+                    coordinates
+                `)
                 .eq("category_id", categoryData.id)
                 .order("name", { ascending: true });
 
@@ -59,7 +66,8 @@ export default function CategoryDetails() {
                         loc.coordinates.coordinates[0]  // lng
                     ],
                     description: loc.short_description,
-                    slug: loc.slug
+                    slug: loc.slug,
+                    image: loc.gallery_urls?.length ? loc.gallery_urls[0] : loc.image_url
                 }));
 
             setMarkers(transformed);
@@ -91,21 +99,27 @@ export default function CategoryDetails() {
             </div>
 
             <div className={styles.placeList}>
-                {locations.map((loc) => (
-                    <div key={loc.id} className={styles.place}>
-                        <h3>
-                            <Link to={`/place/${loc.slug}`}>{loc.name}</Link>
-                        </h3>
-                        <p>{loc.short_description}</p>
-                        {loc.image_url && (
-                            <img
-                                src={loc.image_url}
-                                alt={loc.name}
-                                className={styles.categoriesImage}
-                            />
-                        )}
-                    </div>
-                ))}
+                {locations.map((loc) => {
+                    const displayImage = loc.gallery_urls?.length
+                        ? loc.gallery_urls[0]
+                        : loc.image_url;
+
+                    return (
+                        <div key={loc.id} className={styles.place}>
+                            <h3>
+                                <Link to={`/place/${loc.slug}`}>{loc.name}</Link>
+                            </h3>
+                            <p>{loc.short_description}</p>
+                            {displayImage && (
+                                <img
+                                    src={displayImage}
+                                    alt={loc.name}
+                                    className={styles.categoriesImage}
+                                />
+                            )}
+                        </div>
+                    );
+                })}
             </div>
         </div>
     );
