@@ -26,13 +26,12 @@ function Navbar() {
                 <li className={styles.desktopOnly}><Link to="/places"> Categories </Link></li>
                 <li className={styles.desktopOnly}><Link to="/map"> Map </Link></li>
                 <li className={styles.desktopOnly}><Link to="/about"> About </Link></li>
-                <li className={styles.desktopOnly}><Link to="/"> About </Link></li>
+                <li className={styles.desktopOnly}><Link to="/pending-approval"> About </Link></li>
                 {profile?.role === "admin" && (
                     <Link to="/adminHome" onClick={() => setMenuOpen(false)}>Admin</Link>
                 )}
             </ul>
 
-            {/* Logo */}
             <Link to="/" className={styles.logoLink} aria-label="Startseite">
                 <img
                     src={"https://res.cloudinary.com/dgfycfxe1/image/upload/v1754420389/trailblaze_red_logo2_xlecjf.png"}
@@ -41,7 +40,6 @@ function Navbar() {
                 />
             </Link>
 
-            {/* Right area */}
             <ul className={`${styles.navLinks} ${styles.navLinksRight}`}>
                 <li><LogoutButton /></li>
             </ul>

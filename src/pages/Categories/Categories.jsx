@@ -13,7 +13,7 @@ export default function Categories() {
             const { data, error } = await supabase
                 .from('categories')
                 .select()
-                .order('name', { ascending: true });
+                .order('category_name', { ascending: true });
             if (error) {
                 setError(error.message);
             } else {
@@ -34,11 +34,11 @@ export default function Categories() {
                 {categories.map(cat => (
                     <div key={cat.id} className={styles.category}>
                         <div>
-                            <h2><Link to={`/categories/${cat.slug}`}>{cat.name}</Link></h2>
+                            <h2><Link to={`/categories/${cat.slug}`}>{cat.category_name}</Link></h2>
                             <p>{cat.description}</p>
                         </div>
                         {cat.image_url && (
-                            <img src={cat.image_url} alt={cat.name} className={styles.categoriesImage} />
+                            <img src={cat.image_url} alt={cat.category_name} className={styles.categoriesImage} />
                         )}
                     </div>
                 ))}

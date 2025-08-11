@@ -5,11 +5,14 @@ import Map from "../../components/MapBox/MapBox.jsx";
 import { Link, useParams } from "react-router-dom";
 import { supabase } from "../../Backend/supabaseClient.js";
 import { useEffect, useState } from "react";
+import Slideshow from "../../components/Slideshow";
 
 export default function Place({ initialPlace = null }) {
     const { slug } = useParams(); // slug from the URL
     const [place, setPlace] = useState(null);
     const [loading, setLoading] = useState(true);
+
+
 
     useEffect(() => {
         if (initialPlace) {
@@ -71,20 +74,10 @@ export default function Place({ initialPlace = null }) {
                         )}
                         <p>{place.description}</p>s
                     </div>
-                    <div className={styles.imgWrapper}>
-                        <img
-                            src={place.image_url}
-                            alt={place.name}
-                            className={styles.mainImage}
-                        />
-                    </div>
+                    <Slideshow images={place.gallery_urls || ['https://res.cloudinary.com/dgfycfxe1/image/upload/v1754151712/cld-sample-2.jpg']} interval={3000}></Slideshow>
                 </div>
 
                 <div className={styles.bottomContainer}>
-                    <div className={styles.slideshow}>
-                        <img src={place.image_url} alt="Bild" />
-                    </div>
-
                     <div className={styles.middleContainer}>
                         <div>
                             {place.coordinates && (

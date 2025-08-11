@@ -4,6 +4,7 @@
     overflow: hidden;
     border-radius: 8px;
     display: block;
+    margin: 0 auto; /* centers horizontally */
 }
 
 video {
@@ -17,23 +18,24 @@ video {
 .subtitle {
     font-weight: 800;
     font-size: 2em;
+    text-align: center; /* center text */
+    margin-top: 1rem;
 }
 
 .newPlacesContainer {
     width: 90%;
-    height: 250px;
-    margin: 2rem auto;
+    margin: 2rem auto; /* centers horizontally */
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 2rem;
 }
 
-.newPlace {
+.locationItem {
     background-color: aliceblue;
     border-radius: 8px;
     margin-bottom: 2rem;
     overflow: hidden;
-    position: relative;
+    text-align: center; /* centers the title/description in each card */
 }
 
 .locationImage {

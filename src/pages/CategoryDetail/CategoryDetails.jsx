@@ -33,7 +33,7 @@ export default function CategoryDetails() {
             // 2️⃣ Fetch locations with coordinates
             const { data: locationsData, error: locError } = await supabase
                 .from("locations")
-                .select("id, name, short_description, image_url, slug, coordinates, category_name")
+                .select("id, name, short_description, image_url, slug, coordinates")
                 .eq("category_id", categoryData.id)
                 .order("name", { ascending: true });
 
@@ -59,7 +59,6 @@ export default function CategoryDetails() {
                         loc.coordinates.coordinates[0]  // lng
                     ],
                     description: loc.short_description,
-                    category: loc.category_name || "Unbekannt",
                     slug: loc.slug
                 }));
 
@@ -78,7 +77,7 @@ export default function CategoryDetails() {
         <div>
             <div className={styles.categoryDetails}>
                 <div>
-                    <h1>{category.name}</h1>
+                    <h1>{category.category_name}</h1>
                     <p>{category.description}</p>
                     {category.image_url && (
                         <img
