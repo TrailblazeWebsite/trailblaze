@@ -81,6 +81,7 @@ export default function ManageUsers() {
                             <td>
                                 <button onClick={() => updateUserRole(id, "user")}>
                                     Accept
+
                                 </button>
                             </td>
                         </tr>
