@@ -11,6 +11,7 @@ export default function ManageUsers() {
         const { data, error } = await supabase
             .from('profiles')
             .select('id, email, role, created_at')
+            .neq('role', 'admin')
             .order('email');
 
         if (error) {
@@ -25,6 +26,7 @@ export default function ManageUsers() {
             .from('profiles')
             .select('id, email, role, created_at')
             .eq('role', 'applicant')
+            .neq('role', 'admin')
             .order('email');
 
         if (error) {
@@ -77,7 +79,7 @@ export default function ManageUsers() {
                             <td>{email}</td>
                             <td>{new Date(created_at).toLocaleString()}</td>
                             <td>
-                                <button onClick={() => updateUserRole(id, 'authenticated')}>Accept</button>
+                                <button onClick={() => updateUserRole(id, 'user')}>Accept</button>
                                 <button onClick={() => updateUserRole(id, 'rejected')}>Deny</button>
                             </td>
                         </tr>
@@ -96,24 +98,25 @@ export default function ManageUsers() {
                 </tr>
                 </thead>
                 <tbody>
-                {users.map(({ id, email, role }) => (
-                    <tr key={id}>
-                        <td>{email}</td>
-                        <td>{role}</td>
-                        <td>
-                            <select
-                                value={role}
-                                onChange={(e) => updateUserRole(id, e.target.value)}
-                            >
-                                <option value="applicant">Applicant</option>
-                                <option value="user">User</option>
-                                <option value="trailblazer">Trailblazer</option>
-                                <option value="vanguard">Vanguard</option>
-                                <option value="admin">Admin</option>
-                            </select>
-                        </td>
-                    </tr>
-                ))}
+                {users
+                    .filter(({ role }) => role !== 'admin' && role !== 'applicant')
+                    .map(({ id, email, role }) => (
+                        <tr key={id}>
+                            <td>{email}</td>
+                            <td>{role}</td>
+                            <td>
+                                <select
+                                    value={role}
+                                    onChange={(e) => updateUserRole(id, e.target.value)}
+                                >
+                                    <option value="applicant">Applicant</option>
+                                    <option value="user">User</option>
+                                    <option value="trailblazer">Trailblazer</option>
+                                    <option value="vanguard">Vanguard</option>
+                                </select>
+                            </td>
+                        </tr>
+                    ))}
                 </tbody>
             </table>
         </div>
