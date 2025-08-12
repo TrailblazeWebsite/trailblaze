@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 import { supabase } from "../../Backend/supabaseClient";
 
 export default function ManageUsers() {
@@ -9,10 +9,10 @@ export default function ManageUsers() {
 
     const fetchUsers = async () => {
         const { data, error } = await supabase
-            .from('profiles')
-            .select('id, email, role, created_at')
-            .neq('role', 'admin')
-            .order('email');
+            .from("profiles")
+            .select("id, email, role, created_at")
+            .neq("role", "admin")
+            .order("email");
 
         if (error) {
             setError(error.message);
@@ -23,11 +23,11 @@ export default function ManageUsers() {
 
     const fetchUserApplications = async () => {
         const { data, error } = await supabase
-            .from('profiles')
-            .select('id, email, role, created_at')
-            .eq('role', 'applicant')
-            .neq('role', 'admin')
-            .order('email');
+            .from("profiles")
+            .select("id, email, role, created_at")
+            .eq("role", "applicant")
+            .neq("role", "admin")
+            .order("email");
 
         if (error) {
             setError(error.message);
@@ -47,12 +47,12 @@ export default function ManageUsers() {
 
     const updateUserRole = async (userId, newRole) => {
         const { error } = await supabase
-            .from('profiles')
+            .from("profiles")
             .update({ role: newRole })
-            .eq('id', userId);
+            .eq("id", userId);
 
         if (error) {
-            alert('Error updating role: ' + error.message);
+            alert("Error updating role: " + error.message);
         } else {
             await Promise.all([fetchUsers(), fetchUserApplications()]);
         }
@@ -79,8 +79,9 @@ export default function ManageUsers() {
                             <td>{email}</td>
                             <td>{new Date(created_at).toLocaleString()}</td>
                             <td>
-                                <button onClick={() => updateUserRole(id, 'user')}>Accept</button>
-                                <button onClick={() => updateUserRole(id, 'rejected')}>Deny</button>
+                                <button onClick={() => updateUserRole(id, "user")}>
+                                    Accept
+                                </button>
                             </td>
                         </tr>
                     ))}
@@ -89,7 +90,7 @@ export default function ManageUsers() {
             </div>
 
             <h1>User Management</h1>
-            <table border="1" cellPadding={8} style={{ borderCollapse: 'collapse' }}>
+            <table border="1" cellPadding={8} style={{ borderCollapse: "collapse" }}>
                 <thead>
                 <tr>
                     <th>Email</th>
@@ -99,7 +100,7 @@ export default function ManageUsers() {
                 </thead>
                 <tbody>
                 {users
-                    .filter(({ role }) => role !== 'admin' && role !== 'applicant')
+                    .filter(({ role }) => role !== "admin" && role !== "applicant")
                     .map(({ id, email, role }) => (
                         <tr key={id}>
                             <td>{email}</td>
