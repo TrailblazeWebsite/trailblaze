@@ -14,9 +14,7 @@ export default function ProtectedLayout() {
         return <Navigate to='/login' ></Navigate>
     }
 
-    if (user.role === "applicant") {
-        return <Navigate to="/" replace />;
-    }
+    if (user.role === "applicant") return <Navigate to="/pending-approval" replace />;
 
     return (
         <Wrapper>
