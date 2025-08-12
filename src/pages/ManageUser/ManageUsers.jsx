@@ -105,10 +105,11 @@ export default function ManageUsers() {
                                 value={role}
                                 onChange={(e) => updateUserRole(id, e.target.value)}
                             >
-                                <option value="authenticated">User</option>
-                                <option value="admin">Admin</option>
-                                <option value="trailblazer">Trailblazer</option>
                                 <option value="applicant">Applicant</option>
+                                <option value="user">User</option>
+                                <option value="trailblazer">Trailblazer</option>
+                                <option value="vanguard">Vanguard</option>
+                                <option value="admin">Admin</option>
                             </select>
                         </td>
                     </tr>

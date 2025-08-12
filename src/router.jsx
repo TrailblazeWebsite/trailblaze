@@ -20,6 +20,7 @@ import EditCategories from "./pages/editLocations/EditCategories.jsx";
 import CategoryDetails from "./pages/CategoryDetail/CategoryDetails.jsx";
 import ManageUser from "./pages/ManageUser/ManageUsers";
 import RequireRole from "./components/RequireRole";
+import ApplicantLayout from "./layouts/ApplicantLayout";
 
 export const router = createBrowserRouter([
     {
@@ -27,6 +28,11 @@ export const router = createBrowserRouter([
         children: [
             { path: "login", element: <Login />},
             { path: "register", element: <Register />},
+        ],
+    },
+    {
+        element: <ApplicantLayout />,
+        children: [
             { path: "pending-approval", element: <PendingApproval />},
         ],
     },
