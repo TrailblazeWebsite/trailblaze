@@ -26,7 +26,6 @@ function Navbar() {
                 <li className={styles.desktopOnly}><Link to="/places"> Categories </Link></li>
                 <li className={styles.desktopOnly}><Link to="/map"> Map </Link></li>
                 <li className={styles.desktopOnly}><Link to="/about"> About </Link></li>
-                <li className={styles.desktopOnly}><Link to="/pending-approval"> About </Link></li>
                 {profile?.role === "admin" && (
                     <Link to="/adminHome" onClick={() => setMenuOpen(false)}>Admin</Link>
                 )}

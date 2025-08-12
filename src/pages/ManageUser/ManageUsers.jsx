@@ -3,31 +3,46 @@ import { supabase } from "../../Backend/supabaseClient";
 
 export default function ManageUsers() {
     const [users, setUsers] = useState([]);
+    const [userApplications, setUserApplications] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
-    // Lade alle Nutzerprofile (Admins only)
     const fetchUsers = async () => {
-        setLoading(true);
         const { data, error } = await supabase
             .from('profiles')
-            .select('id, email, role')
+            .select('id, email, role, created_at')
             .order('email');
 
         if (error) {
             setError(error.message);
         } else {
             setUsers(data);
-            setError(null);
         }
-        setLoading(false);
+    };
+
+    const fetchUserApplications = async () => {
+        const { data, error } = await supabase
+            .from('profiles')
+            .select('id, email, role, created_at')
+            .eq('role', 'applicant')
+            .order('email');
+
+        if (error) {
+            setError(error.message);
+        } else {
+            setUserApplications(data);
+        }
     };
 
     useEffect(() => {
-        fetchUsers();
+        const loadData = async () => {
+            setLoading(true);
+            await Promise.all([fetchUsers(), fetchUserApplications()]);
+            setLoading(false);
+        };
+        loadData();
     }, []);
 
-    // Rolle ändern
     const updateUserRole = async (userId, newRole) => {
         const { error } = await supabase
             .from('profiles')
@@ -37,8 +52,7 @@ export default function ManageUsers() {
         if (error) {
             alert('Error updating role: ' + error.message);
         } else {
-            // Refresh User List
-            fetchUsers();
+            await Promise.all([fetchUsers(), fetchUserApplications()]);
         }
     };
 
@@ -47,6 +61,31 @@ export default function ManageUsers() {
 
     return (
         <div>
+            <div>
+                <h1>Pending Applications</h1>
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Email</th>
+                        <th>Created at</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {userApplications.map(({ id, email, created_at }) => (
+                        <tr key={id}>
+                            <td>{email}</td>
+                            <td>{new Date(created_at).toLocaleString()}</td>
+                            <td>
+                                <button onClick={() => updateUserRole(id, 'authenticated')}>Accept</button>
+                                <button onClick={() => updateUserRole(id, 'rejected')}>Deny</button>
+                            </td>
+                        </tr>
+                    ))}
+                    </tbody>
+                </table>
+            </div>
+
             <h1>User Management</h1>
             <table border="1" cellPadding={8} style={{ borderCollapse: 'collapse' }}>
                 <thead>
@@ -69,6 +108,7 @@ export default function ManageUsers() {
                                 <option value="authenticated">User</option>
                                 <option value="admin">Admin</option>
                                 <option value="trailblazer">Trailblazer</option>
+                                <option value="applicant">Applicant</option>
                             </select>
                         </td>
                     </tr>

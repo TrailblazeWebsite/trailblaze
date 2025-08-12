@@ -11,12 +11,12 @@ const slugify = (text) =>
         .trim()
         .replace(/\s+/g, '-')       // Replace spaces with -
         .replace(/[^\w\-]+/g, '')   // Remove all non-word chars
-        .replace(/--+/g, '-');    // Replace multiple - with single -
+        .replace(/--+/g, '-');      // Replace multiple - with single -
 
 export default function EditCategories() {
     const [categories, setCategories] = useState([]);
     const [formData, setFormData] = useState({
-        name: '',
+        category_name: '',
         description: '',
         image_url: ''
     });
@@ -28,8 +28,8 @@ export default function EditCategories() {
     const fetchCategories = async () => {
         const { data, error } = await supabase
             .from("categories")
-            .select()
-            .order('name', { ascending: true });
+            .select("id, category_name, description, image_url, slug")
+            .order('category_name', { ascending: true });
         if (error) {
             console.error("Fehler beim Laden der Kategorien:", error.message);
         } else {
@@ -48,7 +48,7 @@ export default function EditCategories() {
     };
 
     const handleCancelEdit = () => {
-        setFormData({ name: '', description: '', image_url: '' });
+        setFormData({ category_name: '', description: '', image_url: '' });
         setSelectedCategory(null);
         setMessage(null);
     };
@@ -56,8 +56,8 @@ export default function EditCategories() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         const payload = {
-            name: formData.name,
-            slug: slugify(formData.name),
+            category_name: formData.category_name,
+            slug: slugify(formData.category_name),
             description: formData.description,
             image_url: formData.image_url
         };
@@ -79,7 +79,7 @@ export default function EditCategories() {
             setMessage(`❌ Fehler: ${error.message}`);
         } else {
             setMessage(selectedCategory ? '✅ Eintrag aktualisiert!' : '✅ Eintrag erstellt!');
-            setFormData({ name: '', description: '', image_url: '' });
+            setFormData({ category_name: '', description: '', image_url: '' });
             setSelectedCategory(null);
             setSelectedCategoryId("");
             await fetchCategories();
@@ -98,10 +98,10 @@ export default function EditCategories() {
                             if (id === "") {
                                 handleCancelEdit();
                             } else {
-                                const selected = categories.find(cat => cat.id === parseInt(id));
+                                const selected = categories.find(cat => cat.id === id);
                                 if (selected) {
                                     setFormData({
-                                        name: selected.name || '',
+                                        category_name: selected.category_name || '',
                                         description: selected.description || '',
                                         image_url: selected.image_url || ''
                                     });
@@ -113,15 +113,15 @@ export default function EditCategories() {
                         <option value="">➕ Neue Kategorie erstellen</option>
                         {categories.map((cat) => (
                             <option key={cat.id} value={cat.id}>
-                                ✏️ {cat.name}
+                                ✏️ {cat.category_name}
                             </option>
                         ))}
                     </select>
 
                     <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                         <input
-                            name="name"
-                            value={formData.name}
+                            name="category_name"
+                            value={formData.category_name}
                             onChange={handleChange}
                             placeholder="Name der Kategorie"
                             required
