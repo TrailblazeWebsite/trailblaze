@@ -26,9 +26,13 @@ function Navbar() {
                 <li className={styles.desktopOnly}><Link to="/places"> Categories </Link></li>
                 <li className={styles.desktopOnly}><Link to="/map"> Map </Link></li>
                 <li className={styles.desktopOnly}><Link to="/about"> About </Link></li>
+                {(profile?.role === "trailblazer" || profile?.role === "vanguard") && (
+                    <Link to="/addPlace" onClick={() => setMenuOpen(false)}>Add place</Link>
+                )}
                 {profile?.role === "admin" && (
                     <Link to="/adminHome" onClick={() => setMenuOpen(false)}>Admin</Link>
                 )}
+
             </ul>
 
             <Link to="/" className={styles.logoLink} aria-label="Startseite">
@@ -50,6 +54,9 @@ function Navbar() {
                     <Link to="/places" onClick={() => setMenuOpen(false)}>Categories</Link>
                     <Link to="/map" onClick={() => setMenuOpen(false)}>Map</Link>
                     <Link to="/about" onClick={() => setMenuOpen(false)}>About</Link>
+                    {(profile?.role === "trailblazer" || profile?.role === "vanguard") && (
+                        <Link to="/addPlace" onClick={() => setMenuOpen(false)}>Add place</Link>
+                    )}
                     {profile?.role === "admin" && (
                         <Link to="/adminHome" onClick={() => setMenuOpen(false)}>Admin</Link>
                     )}

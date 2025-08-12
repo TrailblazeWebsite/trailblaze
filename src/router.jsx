@@ -13,14 +13,15 @@ import About from "./pages/About/About.jsx";
 import Map from "./pages/Map/Map.jsx";
 import Place from "./pages/Place/Place.jsx";
 import Places from "./pages/Categories/Categories.jsx";
-import EditPlace from "./pages/editPlace/EditPlace.jsx";
+import EditPlace from "./pages/EditPlace/EditPlace.jsx";
 import NotFoundPage from "./pages/NotFoundPage.jsx";
 import AdminHome from "./pages/AdminHome/AdminHome.jsx";
-import EditCategories from "./pages/editLocations/EditCategories.jsx";
+import EditCategories from "./pages/EditLocations/EditCategories.jsx";
 import CategoryDetails from "./pages/CategoryDetail/CategoryDetails.jsx";
 import ManageUser from "./pages/ManageUser/ManageUsers";
 import RequireRole from "./components/RequireRole";
 import ApplicantLayout from "./layouts/ApplicantLayout";
+import AddPlace from "./pages/AddPlace/AddPlace";
 
 export const router = createBrowserRouter([
     {
@@ -48,21 +49,28 @@ export const router = createBrowserRouter([
             { path: "map", element: <Map /> },
             { path: "categories/:slug", element: <CategoryDetails /> },
             { path: "*", element: <NotFoundPage /> },
-            //Admin routes
+            //Trailblazer routes
             { path: "addPlace", element: (
-                <RequireRole allowedRoles={["trailblazer", "ehren-member", "admin"]}>
+                    <RequireRole allowedRoles={["trailblazer", "vanguard"]}>
+                        <AddPlace />
+                    </RequireRole>
+                ),
+            },
+            //Admin routes
+            { path: "editPlace", element: (
+                <RequireRole allowedRoles={["admin"]}>
                     <EditPlace />
                 </RequireRole>
                 ),
             },
             { path: "adminHome", element: (
-                <RequireRole allowedRoles={["trailblazer", "ehren-member", "admin"]}>
+                <RequireRole allowedRoles={["admin"]}>
                     <AdminHome />
                 </RequireRole>
                 ),
             },
             { path: "editCategories", element: (
-                <RequireRole allowedRoles={["trailblazer", "ehren-member", "admin"]}>
+                <RequireRole allowedRoles={["admin"]}>
                     <EditCategories />
                 </RequireRole>
                 ),
