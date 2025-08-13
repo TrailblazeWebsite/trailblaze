@@ -23,13 +23,18 @@ const customItem = new Icon({
     iconSize: [20, 20],
 });
 
+const userLocationIcon = new Icon({
+    iconUrl: "https://res.cloudinary.com/dgfycfxe1/image/upload/v1755043283/platzhalter_h4yom4.svg",
+    iconSize: [25, 25],
+});
+
 export default function MapBox({
                                    zoom = 8,
                                    style = defaultStyle,
                                    markers = [],
                                    categories = [],
                                }) {
-    const { location: userLocation, error } = useUserLocationContext();
+    const { location: userLocation } = useUserLocationContext();
 
     const center = (userLocation &&
         typeof userLocation.lat === "number" &&
@@ -37,8 +42,16 @@ export default function MapBox({
         ? [userLocation.lat, userLocation.lng]
         : defaultCenter;
 
+    // Filter out user location from normal markers
     const validMarkers = markers.filter(
-        m => Array.isArray(m.coordinates) && m.coordinates.length === 2
+        m =>
+            Array.isArray(m.coordinates) &&
+            m.coordinates.length === 2 &&
+            !(
+                userLocation &&
+                m.coordinates[0] === userLocation.lat &&
+                m.coordinates[1] === userLocation.lng
+            )
     );
 
     const renderMarker = (m, index) => (
@@ -64,9 +77,7 @@ export default function MapBox({
             zoomControl={false}
             className={styles.mapBox}
         >
-            <TileLayer
-                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            />
+            <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
 
             <ScaleControl
                 position="bottomleft"
@@ -74,6 +85,15 @@ export default function MapBox({
                 imperial={false}
                 maxWidth={200}
             />
+
+            {userLocation && (
+                <Marker
+                    position={[userLocation.lat, userLocation.lng]}
+                    icon={userLocationIcon}
+                >
+                    <Popup>You are here</Popup>
+                </Marker>
+            )}
 
             {categories.length > 0 ? (
                 <LayersControl position="topright">

@@ -65,6 +65,7 @@ export default function CategoryDetails() {
                         loc.coordinates.coordinates[1], // lat
                         loc.coordinates.coordinates[0]  // lng
                     ],
+                    category: categoryData.category_name,
                     description: loc.short_description,
                     slug: loc.slug,
                     image: loc.gallery_urls?.length ? loc.gallery_urls[0] : loc.image_url
@@ -95,7 +96,16 @@ export default function CategoryDetails() {
                         />
                     )}
                 </div>
-                <MapBox markers={markers} className={styles.map} />
+                <MapBox
+                    markers={markers}
+                    categories={[
+                        {
+                            category: category.category_name,
+                            visible: true,
+                            iconUrl: category.icon_url // if you have it
+                        }
+                    ]}
+                />
             </div>
 
             <div className={styles.placeList}>
