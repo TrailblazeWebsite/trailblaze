@@ -64,13 +64,6 @@
     display: block;
 }
 
-.menuButton {
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 0;
-}
-
 /* Mobile menu dropdown */
 .mobileMenu {
     position: absolute;

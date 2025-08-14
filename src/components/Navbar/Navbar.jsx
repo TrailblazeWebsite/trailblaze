@@ -15,7 +15,6 @@ function Navbar() {
             <ul className={`${styles.navLinks} ${styles.navLinksLeft}`}>
                 <li className={styles.mobileOnly}>
                     <button
-                        className={styles.menuButton}
                         onClick={() => setMenuOpen(!menuOpen)}
                         aria-label="Menu"
                     >
