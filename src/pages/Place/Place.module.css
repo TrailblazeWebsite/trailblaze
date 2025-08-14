@@ -14,8 +14,9 @@
 
 .topRightContainer {
     display: flex;
-    justify-content: flex-end;
-    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-end;
 }
 
 .middleContainer {

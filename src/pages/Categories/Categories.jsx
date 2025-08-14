@@ -29,20 +29,20 @@ export default function Categories() {
     if (error) return <div>❌ Fehler: {error}</div>;
 
     return (
-        <div>
-            <div className={styles.categories}>
-                {categories.map(cat => (
-                    <div key={cat.id} className={styles.category}>
-                        <div>
-                            <h2><Link to={`/categories/${cat.slug}`}>{cat.category_name}</Link></h2>
-                            <p>{cat.description}</p>
-                        </div>
+        <div className={styles.container}>
+            {categories.map(cat => (
+                <div key={cat.id} className={styles.category}>
+                    <div>
+                        <h2><Link to={`/categories/${cat.slug}`}>{cat.category_name}</Link></h2>
+                        <p>{cat.description}</p>
+                    </div>
+                    <div>
                         {cat.image_url && (
                             <img src={cat.image_url} alt={cat.category_name} className={styles.categoriesImage} />
                         )}
                     </div>
-                ))}
-            </div>
+                </div>
+            ))}
         </div>
     );
 }

@@ -75,6 +75,14 @@ export default function Place({ initialPlace = null }) {
                 </div>
                 <div className={styles.topRightContainer}>
                     <div>
+                        {place.rating
+                            ? "⭐".repeat(Math.floor(place.rating))
+                            : "Keine Bewertung"}
+                    </div>
+                    <div>
+                        ⭐ Bewertung: {place.rating ?? "Keine Bewertung"}
+                    </div>
+                    <div>
                         ⭐ Bewertung: {place.rating ?? "Keine Bewertung"}
                     </div>
                 </div>

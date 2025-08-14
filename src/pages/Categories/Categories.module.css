@@ -1,16 +1,25 @@
-.categories {
-    width: 90%;
-    height: 250px;
+.container {
+    width: 100%;
+    margin: 0 auto;
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: 1fr;
     gap: 2rem;
 }
 
 .category {
-    width: 100%;
-    height: auto;
     display: grid;
-    grid-template-columns: 1fr 2fr;
+    grid-template-columns: 2fr 1fr;
+    align-items: center;
+    background-color: #fff;
+    border-radius: 1rem;
+    overflow: hidden;
+    padding: 1.5rem;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.category:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.12);
 }
 
 .categoriesImage {
