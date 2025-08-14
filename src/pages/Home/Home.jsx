@@ -1,6 +1,5 @@
 // src/pages/Home/Home.jsx
 import styles from "./Home.module.css";
-import Trailer from "../../assets/trailer.mp4";
 import { Link } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import { supabase } from "../../Backend/supabaseClient.js";
@@ -88,7 +87,7 @@ function Home() {
         <div className="App">
             <div className={styles.videoContainer}>
                 <video autoPlay loop muted playsInline>
-                    <source src={Trailer} type="video/mp4" />
+                    <source src={"https://res.cloudinary.com/dgfycfxe1/video/upload/v1755212926/trailer_elfcas.mp4"} type="video/mp4" />
                 </video>
             </div>
 

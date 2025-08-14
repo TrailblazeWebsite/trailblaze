@@ -1,6 +1,5 @@
 // src/pages/Place/Place.jsx
 import styles from "./Place.module.css";
-import googleMapsImage from "../../assets/GoogleMaps.png";
 import Map from "../../components/MapBox/MapBox.jsx";
 import { Link, useParams } from "react-router-dom";
 import { supabase } from "../../Backend/supabaseClient.js";
@@ -118,7 +117,7 @@ export default function Place({ initialPlace = null }) {
                             target="_blank"
                             rel="noopener noreferrer"
                         >
-                            <img src={googleMapsImage} alt="Google Maps"/>
+                            <img src={"https://res.cloudinary.com/dgfycfxe1/image/upload/v1755212618/GoogleMaps_mi4bjh.png"} alt="Google Maps"/>
                         </a>
                     )}
                 </div>
