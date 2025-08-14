@@ -65,6 +65,7 @@ html {
   padding-top: 20px;
   width: 95%;
   margin: 0 auto;
+  padding-bottom: 2rem;
 }
 
 input, textarea, select, button {

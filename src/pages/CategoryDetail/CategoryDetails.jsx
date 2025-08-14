@@ -86,7 +86,20 @@ export default function CategoryDetails() {
         <div>
             <div className={styles.categoryDetails}>
                 <div>
-                    <h1>{category.category_name}</h1>
+                    <h1> {category.icon_url && (
+                        <img
+                            src={category.icon_url}
+                            alt=""
+                            style={{
+                                width: "40px",
+                                height: "40px",
+                                objectFit: "contain",
+                                verticalAlign: "middle",
+                                marginRight: "8px"
+                            }}
+                        />
+                    )}
+                        {category.category_name} </h1>
                     <p>{category.description}</p>
                     {category.image_url && (
                         <img
