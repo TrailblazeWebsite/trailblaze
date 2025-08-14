@@ -55,7 +55,7 @@ export default function MapBox({
 
         const customIcon = new Icon({
             iconUrl,
-            iconSize: [25, 25],
+            iconSize: [30, 30],
         });
 
         return (

@@ -171,10 +171,11 @@ export default function EditPlace() {
 
                         <input type="number" step="0.1" min="0" max="5" name="rating" value={formData.rating}
                                onChange={handleChange} placeholder="Bewertung (z.B. 4.5)" required/>
-                        <input type="number" step="0.000001" name="longitude" value={formData.longitude}
-                               onChange={handleChange} placeholder="Längengrad" required/>
                         <input type="number" step="0.000001" name="latitude" value={formData.latitude}
-                               onChange={handleChange} placeholder="Breitengrad" required/>
+                               onChange={handleChange} placeholder="Breitengrad (z.B. 8.1336)" required/>
+                        <input type="number" step="0.000001" name="longitude" value={formData.longitude}
+                               onChange={handleChange} placeholder="Längengrad (z.B. 46.484)" required/>
+
 
                         <textarea
                             name="gallery_urls"
