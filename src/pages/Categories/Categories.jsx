@@ -31,7 +31,7 @@ export default function Categories() {
     return (
         <div className={styles.container}>
             {categories.map(cat => (
-                <div key={cat.id} className={styles.category}>
+                <div key={cat.id} className={`${styles.category} hover-lift`}>
                     <div>
                         <h2>
                             <Link to={`/categories/${cat.slug}`}>

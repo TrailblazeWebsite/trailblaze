@@ -128,7 +128,7 @@ export default function CategoryDetails() {
                         : loc.image_url;
 
                     return (
-                        <div key={loc.id} className={styles.place}>
+                        <div key={loc.id} className={`${styles.place} hover-lift`}>
                             <h3>
                                 <Link to={`/place/${loc.slug}`}>{loc.name}</Link>
                             </h3>

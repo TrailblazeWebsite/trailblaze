@@ -74,7 +74,7 @@ function Home() {
                     : "https://via.placeholder.com/300x200?text=No+Image";
 
                 return (
-                    <div key={loc.id} className={styles.locationItem}>
+                    <div key={loc.id} className={`${styles.locationItem} hover-lift`}>
                         <img src={imgSrc} alt={loc.name} className={styles.locationImage} />
                         <h3><Link to={`/place/${loc.slug}`}>{loc.name}</Link></h3>
                         <p>{loc.short_description}</p>
