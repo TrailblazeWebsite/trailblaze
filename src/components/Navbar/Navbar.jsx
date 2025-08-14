@@ -27,12 +27,20 @@ function Navbar() {
                 <li className={styles.desktopOnly}><Link to="/map"> Map </Link></li>
                 <li className={styles.desktopOnly}><Link to="/about"> About </Link></li>
                 {(profile?.role === "trailblazer" || profile?.role === "vanguard") && (
-                    <Link to="/addPlace" onClick={() => setMenuOpen(false)}>Add place</Link>
-                )}
-                {profile?.role === "admin" && (
-                    <Link to="/adminHome" onClick={() => setMenuOpen(false)}>Admin</Link>
+                    <li className={styles.desktopOnly}>
+                        <Link to="/addPlace" onClick={() => setMenuOpen(false)}>
+                            Add place
+                        </Link>
+                    </li>
                 )}
 
+                {profile?.role === "admin" && (
+                    <li className={styles.desktopOnly}>
+                        <Link to="/adminHome" onClick={() => setMenuOpen(false)}>
+                            Admin
+                        </Link>
+                    </li>
+                )}
             </ul>
 
             <Link to="/" className={styles.logoLink} aria-label="Startseite">
