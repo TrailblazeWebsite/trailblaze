@@ -8,3 +8,20 @@
     border-radius: 1rem;
 }
 
+/* Make checkbox + icon + text sit on one line */
+:global(.leaflet-control-layers-overlays label) {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+:global(.leaflet-control-layers-overlays label input[type="checkbox"]) {
+    margin: 0;
+    flex-shrink: 0;
+}
+
+:global(.leaflet-control-layers-overlays label span) {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}

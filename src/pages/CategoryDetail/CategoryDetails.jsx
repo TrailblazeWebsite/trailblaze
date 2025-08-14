@@ -1,3 +1,4 @@
+// src/pages/CategoryDetails/CategoryDetails.jsx
 import styles from "./CategoryDetails.module.css";
 import { supabase } from "../../Backend/supabaseClient.js";
 import React, { useEffect, useState } from "react";
@@ -8,131 +9,161 @@ export default function CategoryDetails() {
     const { slug } = useParams();
     const [category, setCategory] = useState(null);
     const [locations, setLocations] = useState([]);
+    const [markers, setMarkers] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [markers, setMarkers] = useState([]);
 
     useEffect(() => {
-        const fetchCategoryAndLocations = async () => {
-            setLoading(true);
+        let cancelled = false;
 
-            // 1️⃣ Fetch category by slug
-            const { data: categoryData, error: catError } = await supabase
+        async function load() {
+            setLoading(true);
+            setError(null);
+
+            // 1) Load category by slug
+            const { data: cat, error: catErr } = await supabase
                 .from("categories")
                 .select("*")
                 .eq("slug", slug)
                 .single();
 
-            if (catError || !categoryData) {
-                setError(catError?.message || "Kategorie nicht gefunden");
-                setLoading(false);
+            if (catErr || !cat) {
+                if (!cancelled) {
+                    setError(catErr?.message || "Kategorie nicht gefunden");
+                    setLoading(false);
+                }
                 return;
             }
-            setCategory(categoryData);
+            if (cancelled) return;
+            setCategory(cat);
+            console.log("[CategoryDetails] Kategorie:", cat);
 
-            // 2️⃣ Fetch locations with coordinates and gallery
-            const { data: locationsData, error: locError } = await supabase
-                .from("locations")
-                .select(`
-                    id,
-                    name,
-                    short_description,
-                    gallery_urls,
-                    slug,
-                    coordinates
-                `)
-                .eq("category_id", categoryData.id)
-                .order("name", { ascending: true });
+            // 2) Load locations via RPC that returns GeoJSON for coordinates
+            // Function should return: id, name, short_description, gallery_urls, slug, category_name, coordinates (GeoJSON)
+            const { data: locs, error: locErr } = await supabase
+                .rpc("get_locations_by_category", { cat_id: cat.id });
 
-            if (locError) {
-                setError(locError.message);
-                setLoading(false);
+            if (locErr) {
+                if (!cancelled) {
+                    setError(locErr.message);
+                    setLoading(false);
+                }
                 return;
             }
-            setLocations(locationsData);
+            if (cancelled) return;
 
-            // 3️⃣ Transform into marker format for MapBox
-            const transformed = locationsData
-                .filter(loc =>
-                    loc.coordinates &&
-                    Array.isArray(loc.coordinates.coordinates) &&
-                    loc.coordinates.coordinates.length === 2
-                )
-                .map(loc => ({
-                    id: loc.id,
-                    name: loc.name,
-                    coordinates: [
-                        loc.coordinates.coordinates[1], // lat
-                        loc.coordinates.coordinates[0]  // lng
-                    ],
-                    category: categoryData.category_name,
-                    description: loc.short_description,
-                    slug: loc.slug,
-                    image: loc.gallery_urls?.length ? loc.gallery_urls[0] : loc.image_url
-                }));
+            setLocations(locs || []);
+            console.log("[CategoryDetails] Locations:", locs);
 
-            setMarkers(transformed);
+            // 3) Transform to Leaflet markers
+            const toJson = (v) => (typeof v === "string" ? safeJson(v) : v);
+            const mks = (locs || [])
+                .map((loc) => {
+                    const geo = toJson(loc.coordinates);
+                    const coords = Array.isArray(geo?.coordinates) ? geo.coordinates : null; // GeoJSON [lng, lat]
+                    if (!coords || coords.length < 2) return null;
+
+                    const [lng, lat] = coords;
+                    const latLng = [lat, lng]; // Leaflet expects [lat, lng]
+
+                    return {
+                        id: loc.id,
+                        name: loc.name,
+                        description: loc.short_description,
+                        slug: loc.slug,
+                        category: cat.category_name, // used by your MapBox to group
+                        coordinates: latLng,
+                        image:
+                            Array.isArray(loc.gallery_urls) && loc.gallery_urls.length
+                                ? loc.gallery_urls[0]
+                                : null,
+                    };
+                })
+                .filter(Boolean);
+
+            setMarkers(mks);
+            console.log("[CategoryDetails] Marker für MapBox:", mks);
             setLoading(false);
-        };
+        }
 
-        fetchCategoryAndLocations();
+        load();
+        return () => {
+            cancelled = true;
+        };
     }, [slug]);
+
+    function safeJson(s) {
+        try {
+            return JSON.parse(s);
+        } catch {
+            return null;
+        }
+    }
 
     if (loading) return <div>⏳ Lädt...</div>;
     if (error) return <div>❌ Fehler: {error}</div>;
     if (!category) return <div>❌ Kategorie nicht gefunden</div>;
 
     return (
-        <div>
+        <div className={styles.wrapper}>
             <div className={styles.categoryDetails}>
-                <div>
-                    <h1> {category.icon_url && (
-                        <img
-                            src={category.icon_url}
-                            alt=""
-                            style={{
-                                width: "40px",
-                                height: "40px",
-                                objectFit: "contain",
-                                verticalAlign: "middle",
-                                marginRight: "8px"
-                            }}
-                        />
-                    )}
-                        {category.category_name} </h1>
-                    <p>{category.description}</p>
+                <div className={styles.header}>
+                    <h1>
+                        {category.icon_url && (
+                            <img
+                                src={category.icon_url}
+                                alt=""
+                                style={{
+                                    width: 40,
+                                    height: 40,
+                                    objectFit: "contain",
+                                    verticalAlign: "middle",
+                                    marginRight: 8,
+                                }}
+                            />
+                        )}
+                        {category.category_name}
+                    </h1>
+                    {category.description && <p>{category.description}</p>}
                     {category.image_url && (
                         <img
                             src={category.image_url}
-                            alt={category.name}
+                            alt={category.category_name}
                             className={styles.categoriesImage}
                         />
                     )}
                 </div>
-                <MapBox
-                    markers={markers}
-                    categories={[
-                        {
-                            category: category.category_name,
-                            visible: true,
-                            iconUrl: category.icon_url // if you have it
-                        }
-                    ]}
-                />
+
+                {/* Give MapBox an explicit height via style prop */}
+                <div className={styles.mapWrap}>
+                    <MapBox
+                        markers={markers}
+                        categories={[
+                            {
+                                category: category.category_name,
+                                visible: true,
+                                icon_url: category.icon_url, // your MapBox reads icon_url
+                            },
+                        ]}
+                        zoom={8}
+                        style={{ width: "100%", height: "420px" }}
+                    />
+                </div>
             </div>
 
             <div className={styles.placeList}>
                 {locations.map((loc) => {
-                    const displayImage = loc.gallery_urls?.length
-                        ? loc.gallery_urls[0]
-                        : loc.image_url;
+                    const displayImage =
+                        Array.isArray(loc.gallery_urls) && loc.gallery_urls.length
+                            ? loc.gallery_urls[0]
+                            : null;
 
                     return (
                         <div key={loc.id} className={`${styles.place} hover-lift`}>
                             <h3>
                                 <Link to={`/place/${loc.slug}`}>{loc.name}</Link>
                             </h3>
-                            <p>{loc.short_description}</p>
+                            {loc.short_description && <p>{loc.short_description}</p>}
                             {displayImage && (
                                 <img
                                     src={displayImage}

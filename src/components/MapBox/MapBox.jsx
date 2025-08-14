@@ -1,27 +1,75 @@
 import styles from './MapBox.module.css';
+import 'leaflet/dist/leaflet.css';
+import 'leaflet.markercluster/dist/MarkerCluster.css';
+import 'leaflet.markercluster/dist/MarkerCluster.Default.css';
+
+import React, { useEffect } from 'react';
 import {
     MapContainer,
     Marker,
-    ScaleControl,
     Popup,
     TileLayer,
     LayersControl,
-    LayerGroup
+    LayerGroup,
+    ScaleControl,
+    useMap
 } from 'react-leaflet';
-import 'leaflet/dist/leaflet.css';
-import { Icon } from "leaflet";
-import markerImage from "../../assets/search.svg";
-import { Link } from "react-router-dom";
-import React from "react";
-import { useUserLocationContext } from "../../context/UserLocationContext";
+import L, { Icon } from 'leaflet';
+import 'leaflet.markercluster';
+import { useUserLocationContext } from '../../context/UserLocationContext';
 
 const defaultCenter = [46.484, 8.1336];
 const defaultStyle = { height: '100%', width: '100%' };
+const defaultMarkerUrl = 'https://res.cloudinary.com/dgfycfxe1/image/upload/v1755213033/search_nesbag.svg';
 
 const userLocationIcon = new Icon({
-    iconUrl: "https://res.cloudinary.com/dgfycfxe1/image/upload/v1755043283/platzhalter_h4yom4.svg",
+    iconUrl: 'https://res.cloudinary.com/dgfycfxe1/image/upload/v1755043283/platzhalter_h4yom4.svg',
     iconSize: [25, 25],
 });
+
+/** Cluster-Layer für den Single-Category-Fall */
+function SingleCategoryCluster({ markers, iconUrl, color }) {
+    const map = useMap();
+
+    useEffect(() => {
+        if (!markers?.length) return;
+
+        const clusterGroup = L.markerClusterGroup({
+            iconCreateFunction: (cluster) =>
+                L.divIcon({
+                    html: `<div style="
+            background:${color || '#666'};
+            border-radius:50%;
+            color:#fff;
+            display:flex;align-items:center;justify-content:center;
+            width:40px;height:40px;font-weight:700;">
+            ${cluster.getChildCount()}
+          </div>`,
+                    className: 'custom-cluster-icon',
+                    iconSize: [40, 40],
+                }),
+        });
+
+        markers.forEach((m) => {
+            const icon = new Icon({ iconUrl: iconUrl || defaultMarkerUrl, iconSize: [30, 30] });
+            const popupHtml = `
+        <div>
+          <h3 style="margin:0 0 4px 0;">${m.name ?? ''}</h3>
+          ${m.description ? `<p style="margin:0 0 6px 0;">${m.description}</p>` : ''}
+          ${m.slug ? `<a href="/place/${m.slug}">Mehr</a>` : ''}
+        </div>
+      `;
+            clusterGroup.addLayer(L.marker(m.coordinates, { icon }).bindPopup(popupHtml));
+        });
+
+        map.addLayer(clusterGroup);
+        return () => {
+            map.removeLayer(clusterGroup);
+        };
+    }, [map, markers, iconUrl, color]);
+
+    return null;
+}
 
 export default function MapBox({
                                    zoom = 8,
@@ -31,47 +79,19 @@ export default function MapBox({
                                }) {
     const { location: userLocation } = useUserLocationContext();
 
-    const center = (userLocation &&
-        typeof userLocation.lat === "number" &&
-        typeof userLocation.lng === "number")
-        ? [userLocation.lat, userLocation.lng]
-        : defaultCenter;
+    const center =
+        userLocation &&
+        typeof userLocation.lat === 'number' &&
+        typeof userLocation.lng === 'number'
+            ? [userLocation.lat, userLocation.lng]
+            : defaultCenter;
 
-    // Filter out user location from normal markers
-    const validMarkers = markers.filter(
-        m =>
+    const validMarkers = (markers || []).filter(
+        (m) =>
             Array.isArray(m.coordinates) &&
             m.coordinates.length === 2 &&
-            !(
-                userLocation &&
-                m.coordinates[0] === userLocation.lat &&
-                m.coordinates[1] === userLocation.lng
-            )
+            !(userLocation && m.coordinates[0] === userLocation.lat && m.coordinates[1] === userLocation.lng)
     );
-
-    const renderMarker = (m, index) => {
-        const categoryData = categories.find(cat => cat.category === m.category);
-        const iconUrl = categoryData?.icon_url?.trim() || markerImage;
-
-        const customIcon = new Icon({
-            iconUrl,
-            iconSize: [30, 30],
-        });
-
-        return (
-            <Marker
-                key={m.id ?? m.name ?? index}
-                position={m.coordinates}
-                icon={customIcon}
-            >
-                <Popup>
-                    <h3>{m.name}</h3>
-                    <h4>{m.description}</h4>
-                    {m.id && <h3><Link to={`/place/${m.slug}`}>{m.name}</Link></h3>}
-                </Popup>
-            </Marker>
-        );
-    };
 
     return (
         <MapContainer
@@ -84,40 +104,60 @@ export default function MapBox({
         >
             <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
 
-            <ScaleControl
-                position="bottomleft"
-                metric
-                imperial={false}
-                maxWidth={200}
-            />
+            <ScaleControl position="bottomleft" metric imperial={false} maxWidth={200} />
 
             {userLocation && (
-                <Marker
-                    position={[userLocation.lat, userLocation.lng]}
-                    icon={userLocationIcon}
-                >
+                <Marker position={[userLocation.lat, userLocation.lng]} icon={userLocationIcon}>
                     <Popup>Du bist hier</Popup>
                 </Marker>
             )}
 
-            {categories.length > 0 ? (
-                <LayersControl position="topright">
-                    {categories.map(category => (
-                        <LayersControl.Overlay
-                            key={category.category}
-                            name={category.category}
-                            checked={category.visible || false}
-                        >
-                            <LayerGroup>
-                                {validMarkers
-                                    .filter(m => m.category === category.category)
-                                    .map(renderMarker)}
-                            </LayerGroup>
-                        </LayersControl.Overlay>
-                    ))}
-                </LayersControl>
+            {/* 1 Kategorie → Clustern imperativ */}
+            {categories.length <= 1 ? (
+                <SingleCategoryCluster
+                    markers={validMarkers}
+                    iconUrl={categories[0]?.icon_url}
+                    color={categories[0]?.color}
+                />
             ) : (
-                validMarkers.map(renderMarker)
+                // Mehrere Kategorien → LayersControl + deklarative Marker
+                <LayersControl position="topright">
+                    {categories.map((cat) => {
+                        const catMarkers = validMarkers.filter((m) => m.category === cat.category);
+                        if (!catMarkers.length) return null;
+
+                        const icon = new Icon({
+                            iconUrl: cat.icon_url || defaultMarkerUrl,
+                            iconSize: [30, 30],
+                        });
+
+                        return (
+                            <LayersControl.Overlay
+                                key={cat.category}
+                                name={cat.category}
+                                checked={Boolean(cat.visible)}
+                            >
+                                <LayerGroup>
+                                    {catMarkers.map((m) => (
+                                        <Marker
+                                            key={m.id ?? m.slug ?? `${m.coordinates[0]}-${m.coordinates[1]}`}
+                                            position={m.coordinates}
+                                            icon={icon}
+                                        >
+                                            <Popup>
+                                                <div>
+                                                    <h3 style={{ margin: 0 }}>{m.name ?? ''}</h3>
+                                                    {m.description && <p style={{ margin: '4px 0' }}>{m.description}</p>}
+                                                    {m.slug && <a href={`/place/${m.slug}`}>Mehr</a>}
+                                                </div>
+                                            </Popup>
+                                        </Marker>
+                                    ))}
+                                </LayerGroup>
+                            </LayersControl.Overlay>
+                        );
+                    })}
+                </LayersControl>
             )}
         </MapContainer>
     );
