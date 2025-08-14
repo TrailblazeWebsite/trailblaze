@@ -1,19 +1,22 @@
 .slideshow {
     position: relative;
     width: 100%;
-    height: 100%; /* Let the parent decide the height */
+    height: 100%; /* The parent sets the height */
     margin: 0 auto;
     overflow: hidden;
     border-radius: 1rem;
-    background: #000;
+    background: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .slideshow img,
 .slideshow video {
-    display: block;
-    width: 100%;
-    height: 100%;
-    object-fit: cover; /* Always fill the space */
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain; /* Show entire media without cropping */
+    border-radius: inherit;
 }
 
 /* Navigation buttons — flat style */
@@ -38,14 +41,16 @@
 }
 
 .prev {
-    left: 0;
-    border-radius: 0 8px 8px 0;
+    left: 2px;
+    border-radius: 999px 999px 999px 999px; /* Fully rounded */
 }
 
 .next {
-    right: 0;
-    border-radius: 8px 0 0 8px;
+    right: 2px;
+    border-radius: 999px 999px 999px 999px; /* Fully rounded */
 }
+
+
 
 /* Dots navigation */
 .dots {

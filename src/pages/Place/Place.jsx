@@ -80,7 +80,7 @@ export default function Place({ initialPlace = null }) {
                             : "Keine Bewertung"}
                     </div>
                     <div>
-                        ⭐ Bewertung: {place.rating ?? "Keine Bewertung"}
+
                     </div>
                     <div>
                         ⭐ Bewertung: {place.rating ?? "Keine Bewertung"}
