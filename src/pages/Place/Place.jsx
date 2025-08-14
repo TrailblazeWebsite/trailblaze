@@ -5,7 +5,7 @@ import Map from "../../components/MapBox/MapBox.jsx";
 import { Link, useParams } from "react-router-dom";
 import { supabase } from "../../Backend/supabaseClient.js";
 import { useEffect, useState } from "react";
-import Slideshow from "../../components/Slideshow";
+import Slideshow from "../../components/Slideshow/Slideshow";
 
 export default function Place({ initialPlace = null }) {
     const { slug } = useParams(); // slug from the URL
@@ -60,67 +60,69 @@ export default function Place({ initialPlace = null }) {
         : "#";
 
     return (
-        <div>
-            <div className={styles.place}>
-                <div className={styles.topContainer}>
-                    <div>
-                        <h1>{place.name}</h1>
-                        {place.category_name && (
-                            <h3>
-                                <Link to={`/categories/${place.category_slug}`}>
-                                    {place.category_name}
-                                </Link>
-                            </h3>
-                        )}
-                        <p>{place.description}</p>s
-                    </div>
-                    <Slideshow
-                        media={
-                            Array.isArray(place.gallery_urls) && place.gallery_urls.length > 0
-                                ? place.gallery_urls
-                                : ["https://res.cloudinary.com/dgfycfxe1/image/upload/v1754151712/cld-sample-2.jpg"]
-                        }
-                        interval={3000}
-                    />
-
+        <div className={styles.container}>
+            <div className={styles.topContainer}>
+                <div>
+                    <h1>{place.name}</h1>
+                    {place.category_name && (
+                        <h3>
+                            <Link to={`/categories/${place.category_slug}`}>
+                                {place.category_name}
+                            </Link>
+                        </h3>
+                    )}
+                    <p>{place.description}</p>
                 </div>
-
-                <div className={styles.bottomContainer}>
-                    <div className={styles.middleContainer}>
-                        <div>
-                            {place.coordinates && (
-                                <a
-                                    href={googleMapsLink}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                >
-                                    <img src={googleMapsImage} alt="Google Maps" />
-                                </a>
-                            )}
-                        </div>
-                        <div>⭐ Bewertung: {place.rating ?? "Keine Bewertung"}</div>
+                <div className={styles.topRightContainer}>
+                    <div>
+                        ⭐ Bewertung: {place.rating ?? "Keine Bewertung"}
                     </div>
+                </div>
+            </div>
 
-                    {place.coordinates &&
-                    Array.isArray(place.coordinates) &&
-                    place.coordinates.length === 2 ? (
-                        <div className={styles.map}>
-                            <Map
-                                markers={[{
-                                    name: place.name,
-                                    coordinates: [place.coordinates[1], place.coordinates[0]],
-                                    description: place.short_description,
-                                    category: place.category_name
-                                }]}
-                                center={[place.coordinates[1], place.coordinates[0]]}
-                            />
-                        </div>
-                    ) : (
-                        <div className={styles.map}>
-                            <p>📍 Keine gültigen Koordinaten verfügbar</p>
-                        </div>
+            <div style={{height: "600px"}}>
+                <Slideshow
+                    media={
+                        Array.isArray(place.gallery_urls) && place.gallery_urls.length > 0
+                            ? place.gallery_urls
+                            : ["https://res.cloudinary.com/dgfycfxe1/image/upload/v1754151712/cld-sample-2.jpg"]
+                    }
+                    interval={3000}
+                />
+            </div>
+
+            <div className={styles.middleContainer}>
+                <div>
+                    {place.coordinates && (
+                        <a
+                            href={googleMapsLink}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            <img src={googleMapsImage} alt="Google Maps"/>
+                        </a>
                     )}
                 </div>
+            </div>
+
+            <div>
+                {Array.isArray(place.coordinates) && place.coordinates.length === 2 ? (
+                    <div className={styles.mapContainer}>
+                        <Map
+                            markers={[{
+                                name: place.name,
+                                coordinates: [place.coordinates[1], place.coordinates[0]],
+                                description: place.short_description,
+                                category: place.category_name
+                            }]}
+                            center={[place.coordinates[1], place.coordinates[0]]}
+                        />
+                    </div>
+                ) : (
+                    <div>
+                        <p>📍 Keine gültigen Koordinaten verfügbar</p>
+                    </div>
+                )}
             </div>
         </div>
     );

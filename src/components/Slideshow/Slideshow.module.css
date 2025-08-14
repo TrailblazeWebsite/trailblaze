@@ -1,0 +1,71 @@
+.slideshow {
+    position: relative;
+    width: 100%;
+    height: 100%; /* Let the parent decide the height */
+    margin: 0 auto;
+    overflow: hidden;
+    border-radius: 1rem;
+    background: #000;
+}
+
+.slideshow img,
+.slideshow video {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Always fill the space */
+}
+
+/* Navigation buttons — flat style */
+.button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0, 0, 0, 0.25);
+    color: white;
+    border: none;
+    padding: 12px 16px;
+    cursor: pointer;
+    font-size: 2rem;
+    font-weight: bold;
+    transition: background 0.2s ease-in-out, transform 0.2s ease;
+    z-index: 2;
+}
+
+.button:hover {
+    background: rgba(0, 0, 0, 0.4);
+    transform: translateY(-50%) scale(1.05);
+}
+
+.prev {
+    left: 0;
+    border-radius: 0 8px 8px 0;
+}
+
+.next {
+    right: 0;
+    border-radius: 8px 0 0 8px;
+}
+
+/* Dots navigation */
+.dots {
+    position: absolute;
+    bottom: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 8px;
+}
+
+.dot {
+    width: 10px;
+    height: 10px;
+    background: rgba(255, 255, 255, 0.6);
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.dot.active {
+    background: white;
+}
