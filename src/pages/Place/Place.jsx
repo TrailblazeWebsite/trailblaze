@@ -65,7 +65,18 @@ export default function Place({ initialPlace = null }) {
                 <div>
                     <h1>{place.name}</h1>
                     {place.category_name && (
-                        <h3>
+                        <h3 style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                            {place.category_icon_url && (
+                                <img
+                                    src={place.category_icon_url}
+                                    alt=""
+                                    style={{
+                                        width: "30px", // 50% bigger than 20px
+                                        height: "30px",
+                                        objectFit: "contain"
+                                    }}
+                                />
+                            )}
                             <Link to={`/categories/${place.category_slug}`}>
                                 {place.category_name}
                             </Link>
