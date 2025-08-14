@@ -1,21 +1,21 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Trailblaze",
+  "name": "Trailblaze",
   "icons": [
     {
-      "src": "https://res.cloudinary.com/dgfycfxe1/image/upload/v1755210797/64x64_ggjsry.png",
-      "sizes": "64x64 32x32 24x24 16x16",
-      "type": "image/x-icon"
+      "src": "/64x64.png",
+      "sizes": "64x64",
+      "type": "image/png"
     },
     {
-      "src": "https://res.cloudinary.com/dgfycfxe1/image/upload/v1755210797/192x192_mbvsxg.png",
-      "type": "image/png",
-      "sizes": "192x192"
+      "src": "/192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
     },
     {
-      "src": "https://res.cloudinary.com/dgfycfxe1/image/upload/v1755210797/512x512_xij861.png",
-      "type": "image/png",
-      "sizes": "512x512"
+      "src": "/512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
     }
   ],
   "start_url": ".",
