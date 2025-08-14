@@ -18,11 +18,6 @@ import { useUserLocationContext } from "../../context/UserLocationContext";
 const defaultCenter = [46.484, 8.1336];
 const defaultStyle = { height: '100%', width: '100%' };
 
-const customItem = new Icon({
-    iconUrl: markerImage,
-    iconSize: [20, 20],
-});
-
 const userLocationIcon = new Icon({
     iconUrl: "https://res.cloudinary.com/dgfycfxe1/image/upload/v1755043283/platzhalter_h4yom4.svg",
     iconSize: [25, 25],
@@ -54,19 +49,29 @@ export default function MapBox({
             )
     );
 
-    const renderMarker = (m, index) => (
-        <Marker
-            key={m.id ?? m.name ?? index}
-            position={m.coordinates}
-            icon={customItem}
-        >
-            <Popup>
-                <h3>{m.name}</h3>
-                <h4>{m.description}</h4>
-                {m.id && <h3><Link to={`/place/${m.slug}`}>{m.name}</Link></h3>}
-            </Popup>
-        </Marker>
-    );
+    const renderMarker = (m, index) => {
+        const categoryData = categories.find(cat => cat.category === m.category);
+        const iconUrl = categoryData?.icon_url?.trim() || markerImage;
+
+        const customIcon = new Icon({
+            iconUrl,
+            iconSize: [25, 25],
+        });
+
+        return (
+            <Marker
+                key={m.id ?? m.name ?? index}
+                position={m.coordinates}
+                icon={customIcon}
+            >
+                <Popup>
+                    <h3>{m.name}</h3>
+                    <h4>{m.description}</h4>
+                    {m.id && <h3><Link to={`/place/${m.slug}`}>{m.name}</Link></h3>}
+                </Popup>
+            </Marker>
+        );
+    };
 
     return (
         <MapContainer
@@ -91,7 +96,7 @@ export default function MapBox({
                     position={[userLocation.lat, userLocation.lng]}
                     icon={userLocationIcon}
                 >
-                    <Popup>You are here</Popup>
+                    <Popup>Du bist hier</Popup>
                 </Marker>
             )}
 

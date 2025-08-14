@@ -38,7 +38,8 @@ export default function Map() {
                         coordinates: [loc.coordinates.coordinates[1], loc.coordinates.coordinates[0]],
                         description: loc.short_description,
                         category: loc.category_name || "Unbekannt",
-                        slug: loc.slug
+                        slug: loc.slug,
+                        icon_url: loc.icon_url
                     }));
 
                 if (
@@ -59,11 +60,16 @@ export default function Map() {
                 setMarkers(transformed);
 
                 const uniqueCategories = [...new Set(transformed.map(m => m.category))];
-                const categoryObjects = uniqueCategories.map(cat => ({
-                    category: cat,
-                    color: "#3388ff", // evtl. dynamisch
-                    visible: true
-                }));
+                const categoryObjects = uniqueCategories.map(cat => {
+                    const catIcon = transformed.find(m => m.category === cat)?.icon_url || null;
+                    return {
+                        category: cat,
+                        icon_url: catIcon,
+                        color: "#3388ff",
+                        visible: true
+                    };
+                });
+
 
                 setCategories(categoryObjects);
 
