@@ -1,25 +1,35 @@
 {
   "short_name": "Trailblaze",
   "name": "Trailblaze",
+  "description": "Trailblaze — your adventure starts here. Explore trails and track your journeys offline.",
   "icons": [
     {
-      "src": "/64x64.png",
+      "src": "/icons/icon-64x64.png",
       "sizes": "64x64",
       "type": "image/png"
     },
     {
-      "src": "/192x192.png",
+      "src": "/icons/icon-192x192.png",
       "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "/512x512.png",
-      "sizes": "512x512",
+      "src": "/icons/icon-256x256.png",
+      "sizes": "256x256",
       "type": "image/png"
+    },
+    {
+      "src": "/icons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
     }
   ],
-  "start_url": ".",
+  "start_url": "/index.html",
+  "scope": "/",
   "display": "standalone",
+  "orientation": "portrait",
   "theme_color": "#000000",
-  "background_color": "#ffffff"
+  "background_color": "#ffffff",
+  "id": "/"
 }
