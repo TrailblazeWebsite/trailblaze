@@ -1,9 +1,8 @@
-// src/pages/Home/Home.jsx
 import styles from "./Home.module.css";
-import { Link } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import { supabase } from "../../Backend/supabaseClient.js";
 import { useUserLocationContext } from "../../context/UserLocationContext.jsx";
+import PlacePreview from "../../components/PlacePreview/PlacePreview.jsx"; // ✅ import
 
 function Home() {
     const [newest, setNewest] = useState([]);
@@ -23,7 +22,7 @@ function Home() {
                     .from("locations")
                     .select("*")
                     .order("created_at", { ascending: false })
-                    .limit(4);
+                    .limit(3);
 
                 if (newestError) throw newestError;
                 setNewest(newestData);
@@ -34,7 +33,7 @@ function Home() {
                         .rpc("get_nearest_locations", {
                             user_lat: userLocation.lat,
                             user_lng: userLocation.lng,
-                            limit_count: 4
+                            limit_count: 3
                         });
 
                     if (nearestError) throw nearestError;
@@ -46,7 +45,7 @@ function Home() {
                     .from("locations")
                     .select("*")
                     .order("rating", { ascending: false })
-                    .limit(4);
+                    .limit(3);
 
                 if (bestRatedError) throw bestRatedError;
                 setBestRated(bestRatedData);
@@ -64,25 +63,6 @@ function Home() {
     if (loading) return <div>⏳ Lädt...</div>;
     if (error) return <div>❌ Fehler: {error}</div>;
 
-    // Helper to render location grid
-    const renderGrid = (places) => (
-        <div className={styles.newPlacesContainer}>
-            {places.map(loc => {
-                const imgSrc = loc.gallery_urls?.length
-                    ? loc.gallery_urls[0] // First image from gallery
-                    : "https://via.placeholder.com/300x200?text=No+Image";
-
-                return (
-                    <div key={loc.id} className={`${styles.locationItem} hover-lift`}>
-                        <img src={imgSrc} alt={loc.name} className={styles.locationImage} />
-                        <h3><Link to={`/place/${loc.slug}`}>{loc.name}</Link></h3>
-                        <p>{loc.short_description}</p>
-                    </div>
-                );
-            })}
-        </div>
-    );
-
     return (
         <div className="App">
             <div className={styles.videoContainer}>
@@ -92,17 +72,17 @@ function Home() {
             </div>
 
             <div className={styles.subtitle}>Newest Places</div>
-            {renderGrid(newest)}
+            <PlacePreview locations={newest} />
 
             {userLocation && (
                 <>
                     <div className={styles.subtitle}>Nearest Places</div>
-                    {renderGrid(nearest)}
+                    <PlacePreview locations={nearest} />
                 </>
             )}
 
             <div className={styles.subtitle}>Best Rated Places</div>
-            {renderGrid(bestRated)}
+            <PlacePreview locations={bestRated} />
         </div>
     );
 }

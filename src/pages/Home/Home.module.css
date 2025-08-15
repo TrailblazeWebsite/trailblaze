@@ -19,7 +19,8 @@ video {
     font-weight: 800;
     font-size: 2em;
     text-align: center; /* center text */
-    margin-top: 1rem;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
 }
 
 .newPlacesContainer {

@@ -4,6 +4,7 @@ import { supabase } from "../../Backend/supabaseClient.js";
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import MapBox from "../../components/MapBox/MapBox.jsx";
+import PlacePreview from "../../components/PlacePreview/PlacePreview";
 
 export default function CategoryDetails() {
     const { slug } = useParams();
@@ -99,7 +100,7 @@ export default function CategoryDetails() {
             return null;
         }
     }
-
+    console.log({ loading, error, category, locations, markers });
     if (loading) return <div>⏳ Lädt...</div>;
     if (error) return <div>❌ Fehler: {error}</div>;
     if (!category) return <div>❌ Kategorie nicht gefunden</div>;
@@ -154,30 +155,7 @@ export default function CategoryDetails() {
                 </div>
             </div>
 
-            <div className={styles.placeList}>
-                {locations.map((loc) => {
-                    const displayImage =
-                        Array.isArray(loc.gallery_urls) && loc.gallery_urls.length
-                            ? loc.gallery_urls[0]
-                            : null;
-
-                    return (
-                        <div key={loc.id} className={`${styles.place} hover-lift`}>
-                            <h3>
-                                <Link to={`/place/${loc.slug}`}>{loc.name}</Link>
-                            </h3>
-                            {loc.short_description && <p>{loc.short_description}</p>}
-                            {displayImage && (
-                                <img
-                                    src={displayImage}
-                                    alt={loc.name}
-                                    className={styles.categoriesImage}
-                                />
-                            )}
-                        </div>
-                    );
-                })}
-            </div>
+            <PlacePreview locations={locations}></PlacePreview>
         </div>
     );
 }
