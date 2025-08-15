@@ -105,37 +105,40 @@ export default function CategoryDetails() {
     if (!category) return <div>❌ Kategorie nicht gefunden</div>;
 
     return (
-        <div className={styles.wrapper}>
-            <div className={styles.categoryDetails}>
-                <div className={styles.header}>
-                    <h1>
-                        {category.icon_url && (
+        <div>
+            <div className={styles.topContainer}>
+                <div className={styles.category}>
+                    <div>
+                        <h1>
+                            {category.icon_url && (
+                                <img
+                                    src={category.icon_url}
+                                    alt=""
+                                    style={{
+                                        width: 40,
+                                        height: 40,
+                                        objectFit: "contain",
+                                        verticalAlign: "middle",
+                                        marginRight: 8,
+                                    }}
+                                />
+                            )}
+                            {category.category_name}
+                        </h1>
+                        {category.description && <p>{category.description}</p>}
+                    </div>
+                    <div>
+                        {category.image_url && (
                             <img
-                                src={category.icon_url}
-                                alt=""
-                                style={{
-                                    width: 40,
-                                    height: 40,
-                                    objectFit: "contain",
-                                    verticalAlign: "middle",
-                                    marginRight: 8,
-                                }}
+                                src={category.image_url}
+                                alt={category.category_name}
+                                className={styles.categoriesImage}
                             />
                         )}
-                        {category.category_name}
-                    </h1>
-                    {category.description && <p>{category.description}</p>}
-                    {category.image_url && (
-                        <img
-                            src={category.image_url}
-                            alt={category.category_name}
-                            className={styles.categoriesImage}
-                        />
-                    )}
+                    </div>
                 </div>
 
-                {/* Give MapBox an explicit height via style prop */}
-                <div className={styles.mapWrap}>
+                <div className={styles.mapContainer}>
                     <MapBox
                         markers={markers}
                         categories={[
