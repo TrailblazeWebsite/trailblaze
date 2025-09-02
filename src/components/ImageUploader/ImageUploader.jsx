@@ -1,51 +1,36 @@
 import { useState } from "react";
+import styles from "./ImageUploader.module.css";
 
-export default function ImageUploader({
-                                          value,
-                                          onChange,
-                                          multiple = false, // default: single image
-                                      }) {
+export default function ImageUploader({ value, onChange, multiple = false }) {
     const [uploading, setUploading] = useState(false);
+    const [dragIndex, setDragIndex] = useState(null);
 
-    // Upload to Cloudinary
     const uploadToCloudinary = async (file) => {
         const data = new FormData();
         data.append("file", file);
-        data.append("upload_preset", "unsigned_present"); // ⚡ replace with your unsigned preset
+        data.append("upload_preset", "unsigned_present");
 
         const res = await fetch(
             "https://api.cloudinary.com/v1_1/dgfycfxe1/image/upload",
-            {
-                method: "POST",
-                body: data,
-            }
+            { method: "POST", body: data }
         );
 
         const result = await res.json();
-
-        if (!res.ok) {
-            console.error("Cloudinary upload error:", result);
-            throw new Error(result.error?.message || "Upload failed");
-        }
-
+        if (!res.ok) throw new Error(result.error?.message || "Upload failed");
         return result;
     };
-
 
     const handleFiles = async (e) => {
         const files = Array.from(e.target.files);
         if (!files.length) return;
-
         setUploading(true);
+
         try {
             const uploads = await Promise.all(files.map(uploadToCloudinary));
             const newUrls = uploads.map((u) => u.secure_url);
 
-            if (multiple) {
-                onChange([...(value || []), ...newUrls]);
-            } else {
-                onChange(newUrls[0]); // just one image
-            }
+            if (multiple) onChange([...(value || []), ...newUrls]);
+            else onChange(newUrls[0]);
         } catch (err) {
             console.error(err);
             alert("❌ Fehler beim Hochladen des Bildes");
@@ -55,46 +40,49 @@ export default function ImageUploader({
     };
 
     const handleRemove = (idx) => {
-        if (multiple) {
-            const newUrls = value.filter((_, i) => i !== idx);
-            onChange(newUrls);
-        } else {
-            onChange(null);
-        }
+        if (multiple) onChange(value.filter((_, i) => i !== idx));
+        else onChange(null);
+    };
+
+    // Drag-and-drop for reordering
+    const handleDragStart = (index) => setDragIndex(index);
+    const handleDragOver = (e) => e.preventDefault();
+    const handleDrop = (index) => {
+        if (dragIndex === null || dragIndex === index) return;
+        const newOrder = [...value];
+        const [moved] = newOrder.splice(dragIndex, 1);
+        newOrder.splice(index, 0, moved);
+        onChange(newOrder);
+        setDragIndex(null);
     };
 
     return (
-        <div>
+        <div className={styles.container}>
             <input
                 type="file"
                 accept="image/*"
                 multiple={multiple}
                 onChange={handleFiles}
                 disabled={uploading}
+                className={styles.inputFile}
             />
-            {uploading && <p>⏳ Uploading...</p>}
+            {uploading && <p className={styles.uploading}>⏳ Uploading...</p>}
 
-            {/* Previews */}
             {multiple ? (
-                <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap", marginTop: "1rem" }}>
+                <div className={styles.previewList}>
                     {value?.map((url, i) => (
-                        <div key={i} style={{ position: "relative" }}>
-                            <img
-                                src={url}
-                                alt={`gallery-${i}`}
-                                style={{ width: "100px", borderRadius: "8px" }}
-                            />
+                        <div
+                            key={i}
+                            className={styles.previewItem}
+                            draggable
+                            onDragStart={() => handleDragStart(i)}
+                            onDragOver={handleDragOver}
+                            onDrop={() => handleDrop(i)}
+                        >
+                            <img src={url} alt={`gallery-${i}`} />
                             <button
                                 type="button"
-                                style={{
-                                    position: "absolute",
-                                    top: 0,
-                                    right: 0,
-                                    background: "red",
-                                    color: "white",
-                                    border: "none",
-                                    cursor: "pointer",
-                                }}
+                                className={styles.removeBtn}
                                 onClick={() => handleRemove(i)}
                             >
                                 ✕
@@ -104,23 +92,11 @@ export default function ImageUploader({
                 </div>
             ) : (
                 value && (
-                    <div style={{ position: "relative", marginTop: "1rem" }}>
-                        <img
-                            src={value}
-                            alt="uploaded"
-                            style={{ width: "150px", borderRadius: "8px" }}
-                        />
+                    <div className={styles.previewItem}>
+                        <img src={value} alt="uploaded" />
                         <button
                             type="button"
-                            style={{
-                                position: "absolute",
-                                top: 0,
-                                right: 0,
-                                background: "red",
-                                color: "white",
-                                border: "none",
-                                cursor: "pointer",
-                            }}
+                            className={styles.removeBtn}
                             onClick={() => handleRemove()}
                         >
                             ✕

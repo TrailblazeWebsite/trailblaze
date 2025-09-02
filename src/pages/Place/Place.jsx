@@ -1,3 +1,4 @@
+
 import styles from "./Place.module.css";
 import Map from "../../components/MapBox/MapBox.jsx";
 import { Link, useParams } from "react-router-dom";

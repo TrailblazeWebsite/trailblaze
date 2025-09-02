@@ -22,7 +22,7 @@ import ManageUser from "./pages/ManageUser/ManageUsers";
 import RequireRole from "./components/RequireRole";
 import ApplicantLayout from "./layouts/ApplicantLayout";
 import AddPlace from "./pages/AddPlace/AddPlace";
-import PlacePreview from "./components/PlacePreview/PlacePreview";
+import PlaceEditPreview from "./components/PlaceEditPreview/PlaceEditPreview";
 
 export const router = createBrowserRouter([
     {
@@ -49,7 +49,7 @@ export const router = createBrowserRouter([
             { path: "places", element: <Places /> },
             { path: "map", element: <Map /> },
             { path: "categories/:slug", element: <CategoryDetails /> },
-            { path: "placePreview", element: <PlacePreview />},
+            { path: "placePreview", element: <PlaceEditPreview />},
             { path: "*", element: <NotFoundPage /> },
             //Trailblazer routes
             { path: "addPlace", element: (

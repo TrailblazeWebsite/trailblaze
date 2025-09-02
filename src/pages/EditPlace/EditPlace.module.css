@@ -1,17 +1,133 @@
+/* Main grid container */
 .container {
-    width: 90%;
     margin: 0 auto;
     display: grid;
-    grid-template-columns: 1fr 2fr;
+    grid-template-columns: 300px 1fr; /* fixed left, right flexible */
     gap: 2rem;
+    padding: 1rem;
+    width: 100%;
+    max-width: 1200px;
+    box-sizing: border-box;
+    height: 90vh; /* fixed height for scrolling */
 }
 
+/* Left column: form */
 .input {
-    grid-template-rows: repeat(10, 1fr);
-    display: grid;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    flex-shrink: 0;
+    height: 100%;
+    overflow-y: auto;
+    padding-right: 0.5rem;
+    box-sizing: border-box;
 }
 
+/* Right column: page preview */
 .pagePreview {
     border: 2px solid black;
     border-radius: 8px;
+    height: 100%;
+    padding: 1rem;
+    box-sizing: border-box;
+    overflow: auto; /* scroll content if too big */
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+/* Ensure all child elements inside pagePreview do not overflow */
+.pagePreview * {
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+/* Slideshow or map inside preview */
+.pagePreview img,
+.pagePreview .mapContainer,
+.pagePreview iframe,
+.pagePreview video {
+    width: 100%;
+    height: auto;
+    max-width: 100%;
+}
+
+/* Form inputs */
+.input input,
+.input select,
+.input textarea {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 1rem;
+}
+
+/* Textareas for description fields */
+.input textarea[name="short_description"] {
+    min-height: 60px;
+    resize: vertical;
+}
+
+.input textarea[name="description"] {
+    min-height: 120px;
+    resize: vertical;
+}
+
+/* Buttons */
+.input button {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+/* ImageUploader styles */
+.imageUploader {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.imageUploader .previews {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 0.5rem;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.imageUploader .preview {
+    position: relative;
+    width: 100px;
+    flex-shrink: 0;
+}
+
+.imageUploader .preview img {
+    width: 100%;
+    border-radius: 8px;
+}
+
+.imageUploader .preview button {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background: red;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    font-size: 0.8rem;
+    line-height: 20px;
+    text-align: center;
+}
+
+/* Dragging placeholder */
+.imageUploader .preview.dragging {
+    opacity: 0.5;
+    border: 2px dashed #0070f3;
 }

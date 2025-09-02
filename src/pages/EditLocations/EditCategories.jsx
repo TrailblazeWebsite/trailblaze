@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import styles from "./EditCategories.module.css";
 import { supabase } from "../../Backend/supabaseClient.js";
 import Categories from "../Categories/Categories.jsx";
+import ImageUploader from "../../components/ImageUploader/ImageUploader.jsx";
 
 // Helper: slugify a string
 const slugify = (text) =>
@@ -132,12 +133,14 @@ export default function EditCategories() {
                             onChange={handleChange}
                             placeholder="Beschreibung"
                         />
-                        <input
-                            name="image_url"
-                            value={formData.image_url}
-                            onChange={handleChange}
-                            placeholder="Bild-URL"
+
+                        {/* Replace image_url input with ImageUploader */}
+                        <ImageUploader
+                            value={formData.image_url || null}
+                            onChange={(url) => setFormData(prev => ({ ...prev, image_url: url }))}
+                            multiple={false} // only single image
                         />
+
                         <button type="submit">
                             {selectedCategory ? 'Aktualisieren' : 'Speichern'}
                         </button>

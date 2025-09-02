@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import styles from "./EditPlace.module.css";
 import { supabase } from "../../Backend/supabaseClient.js";
 import ImageUploader from "../../components/ImageUploader/ImageUploader";
+import PlaceEditPreview from "../../components/PlaceEditPreview/PlaceEditPreview";
 
 export default function EditPlace() {
     const [locations, setLocations] = useState([]);
@@ -192,7 +193,7 @@ export default function EditPlace() {
                     </form>
                     {message && <p>{message}</p>}
                 </div>
-                <div className={styles.pagePreview}></div>
+                <PlaceEditPreview formData={formData} categories={categories} />
             </div>
         </div>
     );

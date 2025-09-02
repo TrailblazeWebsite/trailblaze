@@ -42,11 +42,14 @@
     font-weight: 600;
     color: white;
     background: linear-gradient(to top, rgba(0, 0, 0, 0.6), transparent);
+
 }
 
 .imageTitle a {
+    pointer-events: auto;
     color: inherit;
     text-decoration: none;
+
 }
 
 .description {

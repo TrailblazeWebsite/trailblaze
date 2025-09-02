@@ -4,6 +4,7 @@ import { supabase } from "../../Backend/supabaseClient.js";
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import MapBox from "../../components/MapBox/MapBox.jsx";
+import PlaceEditPreview from "../../components/PlaceEditPreview/PlaceEditPreview";
 import PlacePreview from "../../components/PlacePreview/PlacePreview";
 
 export default function CategoryDetails() {

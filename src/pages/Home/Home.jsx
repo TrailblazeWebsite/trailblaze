@@ -3,7 +3,8 @@ import styles from "./Home.module.css";
 import React, { useEffect, useState } from "react";
 import { supabase } from "../../Backend/supabaseClient.js";
 import { useUserLocationContext } from "../../context/UserLocationContext.jsx";
-import PlacePreview from "../../components/PlacePreview/PlacePreview.jsx";
+import PlaceEditPreview from "../../components/PlaceEditPreview/PlaceEditPreview.jsx";
+import PlacePreview from "../../components/PlacePreview/PlacePreview";
 
 function Home() {
     const [newest, setNewest] = useState([]);
@@ -77,13 +78,13 @@ function Home() {
             {userLocation && nearest.length > 0 && (
                 <>
                     <div className={styles.subtitle}>Nearest Places</div>
-                    <PlacePreview locations={nearest} />
+                    <PlacePreview  locations={nearest} />
                 </>
             )}
 
             {/* Best Rated Places */}
             <div className={styles.subtitle}>Best Rated Places</div>
-            <PlacePreview locations={bestRated} />
+            <PlacePreview  locations={bestRated} />
         </div>
     );
 }
