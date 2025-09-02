@@ -1,8 +1,9 @@
+// src/pages/Home/Home.jsx
 import styles from "./Home.module.css";
 import React, { useEffect, useState } from "react";
 import { supabase } from "../../Backend/supabaseClient.js";
 import { useUserLocationContext } from "../../context/UserLocationContext.jsx";
-import PlacePreview from "../../components/PlacePreview/PlacePreview.jsx"; // ✅ import
+import PlacePreview from "../../components/PlacePreview/PlacePreview.jsx";
 
 function Home() {
     const [newest, setNewest] = useState([]);
@@ -15,19 +16,16 @@ function Home() {
     useEffect(() => {
         async function fetchData() {
             setLoading(true);
+            setError(null);
 
             try {
                 // 1️⃣ Newest Places
                 const { data: newestData, error: newestError } = await supabase
-                    .from("locations")
-                    .select("*")
-                    .order("created_at", { ascending: false })
-                    .limit(3);
-
+                    .rpc("get_newest_locations", { limit_count: 3 });
                 if (newestError) throw newestError;
-                setNewest(newestData);
+                setNewest(newestData || []);
 
-                // 2️⃣ Nearest Places
+                // 2️⃣ Nearest Places (only if user location exists)
                 if (userLocation) {
                     const { data: nearestData, error: nearestError } = await supabase
                         .rpc("get_nearest_locations", {
@@ -35,23 +33,19 @@ function Home() {
                             user_lng: userLocation.lng,
                             limit_count: 3
                         });
-
                     if (nearestError) throw nearestError;
-                    setNearest(nearestData);
+                    setNearest(nearestData || []);
                 }
 
                 // 3️⃣ Best Rated Places
                 const { data: bestRatedData, error: bestRatedError } = await supabase
-                    .from("locations")
-                    .select("*")
-                    .order("rating", { ascending: false })
-                    .limit(3);
-
+                    .rpc("get_best_rated_locations", { limit_count: 3 });
                 if (bestRatedError) throw bestRatedError;
-                setBestRated(bestRatedData);
+                setBestRated(bestRatedData || []);
 
             } catch (err) {
-                setError(err.message);
+                console.error("Error fetching Home data:", err);
+                setError(err.message || "Fehler beim Laden");
             } finally {
                 setLoading(false);
             }
@@ -65,22 +59,29 @@ function Home() {
 
     return (
         <div className="App">
+            {/* Hero Video */}
             <div className={styles.videoContainer}>
                 <video autoPlay loop muted playsInline>
-                    <source src={"https://res.cloudinary.com/dgfycfxe1/video/upload/v1755212926/trailer_elfcas.mp4"} type="video/mp4" />
+                    <source
+                        src="https://res.cloudinary.com/dgfycfxe1/video/upload/v1755212926/trailer_elfcas.mp4"
+                        type="video/mp4"
+                    />
                 </video>
             </div>
 
+            {/* Newest Places */}
             <div className={styles.subtitle}>Newest Places</div>
             <PlacePreview locations={newest} />
 
-            {userLocation && (
+            {/* Nearest Places */}
+            {userLocation && nearest.length > 0 && (
                 <>
                     <div className={styles.subtitle}>Nearest Places</div>
                     <PlacePreview locations={nearest} />
                 </>
             )}
 
+            {/* Best Rated Places */}
             <div className={styles.subtitle}>Best Rated Places</div>
             <PlacePreview locations={bestRated} />
         </div>

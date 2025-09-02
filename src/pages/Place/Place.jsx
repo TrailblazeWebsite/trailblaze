@@ -1,4 +1,3 @@
-// src/pages/Place/Place.jsx
 import styles from "./Place.module.css";
 import Map from "../../components/MapBox/MapBox.jsx";
 import { Link, useParams } from "react-router-dom";
@@ -7,11 +6,9 @@ import { useEffect, useState } from "react";
 import Slideshow from "../../components/Slideshow/Slideshow";
 
 export default function Place({ initialPlace = null }) {
-    const { slug } = useParams(); // slug from the URL
+    const { slug } = useParams();
     const [place, setPlace] = useState(null);
     const [loading, setLoading] = useState(true);
-
-
 
     useEffect(() => {
         if (initialPlace) {
@@ -28,7 +25,7 @@ export default function Place({ initialPlace = null }) {
 
         const fetchPlace = async () => {
             const { data: placeData, error } = await supabase
-                .rpc("get_location_with_geojson_by_slug", { p_slug: slug }) // pass slug directly
+                .rpc("get_location_with_geojson_by_slug", { p_slug: slug })
                 .single();
 
             if (error || !placeData) {
@@ -37,12 +34,13 @@ export default function Place({ initialPlace = null }) {
                 return;
             }
 
-            // Normalize GeoJSON to plain [lng, lat]
-            if (placeData?.coordinates?.coordinates) {
-                placeData.coordinates = placeData.coordinates.coordinates;
-            } else {
-                placeData.coordinates = null;
+            // Extract coordinates array from JSON {type:"Point", coordinates:[lng, lat]}
+            let coordsArray = null;
+            if (placeData.coordinates?.coordinates) {
+                coordsArray = placeData.coordinates.coordinates;
             }
+
+            placeData.coordinates = coordsArray; // now [lng, lat]
 
             setPlace(placeData);
             setLoading(false);
@@ -65,18 +63,7 @@ export default function Place({ initialPlace = null }) {
                     <h1>{place.name}</h1>
                     {place.category_name && (
                         <h3 style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                            {place.category_icon_url && (
-                                <img
-                                    src={place.category_icon_url}
-                                    alt=""
-                                    style={{
-                                        width: "30px", // 50% bigger than 20px
-                                        height: "30px",
-                                        objectFit: "contain"
-                                    }}
-                                />
-                            )}
-                            <Link to={`/categories/${place.category_slug}`}>
+                            <Link to={`/categories/${place.category_id}`}>
                                 {place.category_name}
                             </Link>
                         </h3>
@@ -90,15 +77,12 @@ export default function Place({ initialPlace = null }) {
                             : "Keine Bewertung"}
                     </div>
                     <div>
-
-                    </div>
-                    <div>
                         ⭐ Bewertung: {place.rating ?? "Keine Bewertung"}
                     </div>
                 </div>
             </div>
 
-            <div style={{height: "600px"}}>
+            <div style={{ height: "600px" }}>
                 <Slideshow
                     media={
                         Array.isArray(place.gallery_urls) && place.gallery_urls.length > 0
@@ -112,12 +96,13 @@ export default function Place({ initialPlace = null }) {
             <div className={styles.middleContainer}>
                 <div>
                     {place.coordinates && (
-                        <a
-                            href={googleMapsLink}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                        >
-                            <img src={"https://res.cloudinary.com/dgfycfxe1/image/upload/v1755212618/GoogleMaps_mi4bjh.png"} alt="Google Maps"/>
+                        <a href={googleMapsLink} target="_blank" rel="noopener noreferrer">
+                            <img
+                                src={
+                                    "https://res.cloudinary.com/dgfycfxe1/image/upload/v1755212618/GoogleMaps_mi4bjh.png"
+                                }
+                                alt="Google Maps"
+                            />
                         </a>
                     )}
                 </div>
@@ -127,12 +112,14 @@ export default function Place({ initialPlace = null }) {
                 {Array.isArray(place.coordinates) && place.coordinates.length === 2 ? (
                     <div className={styles.mapContainer}>
                         <Map
-                            markers={[{
-                                name: place.name,
-                                coordinates: [place.coordinates[1], place.coordinates[0]],
-                                description: place.short_description,
-                                category: place.category_name
-                            }]}
+                            markers={[
+                                {
+                                    name: place.name,
+                                    coordinates: [place.coordinates[1], place.coordinates[0]], // [lat, lng]
+                                    description: place.short_description,
+                                    category: place.category_name,
+                                },
+                            ]}
                             center={[place.coordinates[1], place.coordinates[0]]}
                         />
                     </div>
