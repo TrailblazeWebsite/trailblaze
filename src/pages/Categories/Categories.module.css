@@ -15,12 +15,27 @@
     overflow: hidden;
     padding: 1.5rem;
     gap: 2rem;
+    text-decoration: none; /* prevent underline */
+    color: inherit; /* default color */
+    cursor: pointer; /* show it's clickable */
 }
+
+/* Make only the title text red on hover */
+.category:hover h2 {
+    color: #dd143c;
+}
+
+/* Keep description normal */
+.category p {
+    color: #333; /* or whatever default you want */
+    margin: 0.5rem 0 0 0;
+}
+
 
 .categoriesImage {
     width: 100%;
-    height: auto;
+    height: 200px; /* fixed height, adjust as needed */
     display: block;
-    object-fit: cover;
+    object-fit: cover; /* crops image to fill without stretching */
     border-radius: 1rem;
 }

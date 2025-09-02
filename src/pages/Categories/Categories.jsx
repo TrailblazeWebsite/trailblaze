@@ -31,25 +31,27 @@ export default function Categories() {
     return (
         <div className={styles.container}>
             {categories.map(cat => (
-                <div key={cat.id} className={`${styles.category} hover-lift`}>
+                <Link
+                    key={cat.id}
+                    to={`/categories/${cat.slug}`}
+                    className={`${styles.category} hover-lift`}
+                >
                     <div>
                         <h2>
-                            <Link to={`/categories/${cat.slug}`}>
-                                {cat.icon_url && (
-                                    <img
-                                        src={cat.icon_url}
-                                        alt=""
-                                        style={{
-                                            width: "30px",
-                                            height: "30px",
-                                            objectFit: "contain",
-                                            verticalAlign: "middle",
-                                            marginRight: "8px"
-                                        }}
-                                    />
-                                )}
-                                {cat.category_name}
-                            </Link>
+                            {cat.icon_url && (
+                                <img
+                                    src={cat.icon_url}
+                                    alt=""
+                                    style={{
+                                        width: "30px",
+                                        height: "30px",
+                                        objectFit: "contain",
+                                        verticalAlign: "middle",
+                                        marginRight: "8px"
+                                    }}
+                                />
+                            )}
+                            {cat.category_name}
                         </h2>
                         <p>{cat.description}</p>
                     </div>
@@ -62,10 +64,11 @@ export default function Categories() {
                             />
                         )}
                     </div>
-                </div>
+                </Link>
             ))}
         </div>
     );
+
 
 }
 

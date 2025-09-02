@@ -16,7 +16,11 @@ export default function PlacePreview({ locations }) {
                         : null;
 
                 return (
-                    <div key={loc.id} className={`${styles.place} hover-lift`}>
+                    <Link
+                        key={loc.id}
+                        to={`/place/${loc.slug}`}
+                        className={`${styles.place} hover-lift`}
+                    >
                         <div className={styles.imageWrapper}>
                             {displayImage && (
                                 <img
@@ -25,16 +29,15 @@ export default function PlacePreview({ locations }) {
                                     className={styles.categoriesImage}
                                 />
                             )}
-                            <h3 className={styles.imageTitle}>
-                                <Link to={`/place/${loc.slug}`}>{loc.name}</Link>
-                            </h3>
+                            <h3 className={styles.imageTitle}>{loc.name}</h3>
                         </div>
                         {loc.short_description && (
                             <p className={styles.description}>{loc.short_description}</p>
                         )}
-                    </div>
+                    </Link>
                 );
             })}
         </div>
     );
+
 }

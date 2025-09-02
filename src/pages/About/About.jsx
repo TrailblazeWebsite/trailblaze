@@ -54,20 +54,16 @@ function About() {
                 <h1>Contact us</h1>
                 <div className={styles.contactItems}>
                     <div className={styles.contactItems}>
-                        <div>
-                            <a
-                                href="https://www.instagram.com/trailblaze_global/"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                            >
-                                Instagram
-                            </a>
-                        </div>
-                        <div>
-                            <a href="mailto:trailblaze@outlook.de">
-                                Email
-                            </a>
-                        </div>
+                        <a
+                            href="https://www.instagram.com/trailblaze_global/"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            Instagram
+                        </a>
+                        <a href="mailto:trailblaze@outlook.de">
+                            Email
+                        </a>
                     </div>
                 </div>
             </div>
