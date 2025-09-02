@@ -77,9 +77,6 @@ export default function Place({ initialPlace = null }) {
                             ? "⭐".repeat(Math.floor(place.rating))
                             : "Keine Bewertung"}
                     </div>
-                    <div>
-                        ⭐ Bewertung: {place.rating ?? "Keine Bewertung"}
-                    </div>
                 </div>
             </div>
 

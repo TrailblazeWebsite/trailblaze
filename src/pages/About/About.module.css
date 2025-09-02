@@ -1,29 +1,89 @@
-.imgWrapper {
+.container {
+    margin-bottom: 4rem;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.videoContainer {
     overflow: hidden;
     border-radius: 1rem;
-    width: 80%;
-    height: 30vh;
+    height: 20vh;
+    margin-bottom: 2rem;
+}
+
+.videoContainer video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.content {
+    display: grid;
+    grid-template-rows: repeat(2, auto);
+    gap: 3rem;
+    width: 100%;
+}
+
+.section {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    flex-wrap: nowrap; /* IMPORTANT: prevent stacking */
+    align-items: flex-start; /* <-- align items to top */
+}
+
+.section:nth-child(even) {
+    flex-direction: row-reverse; /* alternate layout */
+}
+
+.imgWrapper {
+    flex: 0 0 50%; /* FIXED 50% width, does not shrink */
+    aspect-ratio: 2 / 1;
+    overflow: hidden;
+    border-radius: 1rem;
 }
 
 .image {
     width: 100%;
-    height: auto;
-    display: block;
+    height: 100%;
     object-fit: cover;
     border-radius: 1rem;
-    overflow: hidden;
 }
 
-.persons {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    margin: 0 20% 0 20%;
+.textBlock {
+    flex: 0 0 50%;
+    padding: 0 1rem;
+    display: flex;
+    flex-direction: column; /* ensures text stacks top to bottom */
+    justify-content: flex-start; /* align content to top */
 }
 
-.person {
+.textBlock h1 {
+    font-size: 1.8rem;
+    margin-bottom: 0.5rem;
+}
+
+.contact {
+    text-align: center;
+    padding: 2rem 0;
+}
+
+.contact h1 {
+    margin-bottom: 1rem;
+}
+
+.contactItems {
+    display: flex;
     justify-content: center;
+    gap: 2rem;
+    flex-wrap: wrap;
 }
 
-.person h1 {
-    justify-content: center;
+.contactItems div {
+    background: #f5f5f5;
+    padding: 1rem 2rem;
+    border-radius: 0.8rem;
+    font-weight: 500;
+    min-width: 120px;
+    text-align: center;
 }

@@ -1,0 +1,54 @@
+.title {
+    font-size: 1.6rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    color: #222;
+}
+
+.tableWrapper {
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    overflow-x: auto;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table th, .table td {
+    text-align: left;
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid #eee;
+}
+
+.table th {
+    background: #fafafa;
+    font-weight: 600;
+    color: #444;
+}
+
+.table tr:hover td {
+    background: #f7f7f7;
+}
+
+.roleSelect {
+    padding: 0.4rem 0.6rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    background-color: #fff;
+    cursor: pointer;
+    transition: border 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.roleSelect:hover {
+    border-color: #888;
+}
+
+.roleSelect:focus {
+    outline: none;
+    border-color: #4caf50;
+    box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.3);
+}

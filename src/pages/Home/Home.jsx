@@ -64,7 +64,7 @@ function Home() {
             <div className={styles.videoContainer}>
                 <video autoPlay loop muted playsInline>
                     <source
-                        src="https://res.cloudinary.com/dgfycfxe1/video/upload/v1755212926/trailer_elfcas.mp4"
+                        src="https://res.cloudinary.com/dgfycfxe1/video/upload/v1756836720/videoplayback_mws7op.mp4"
                         type="video/mp4"
                     />
                 </video>
