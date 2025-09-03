@@ -10,8 +10,11 @@ export default function ImageUploader({ value, onChange, multiple = false }) {
         data.append("file", file);
         data.append("upload_preset", "unsigned_present");
 
+        // choose resource type dynamically
+        const resourceType = file.type.startsWith("video/") ? "video" : "image";
+
         const res = await fetch(
-            "https://api.cloudinary.com/v1_1/dgfycfxe1/image/upload",
+            `https://api.cloudinary.com/v1_1/dgfycfxe1/${resourceType}/upload`,
             { method: "POST", body: data }
         );
 
@@ -19,6 +22,7 @@ export default function ImageUploader({ value, onChange, multiple = false }) {
         if (!res.ok) throw new Error(result.error?.message || "Upload failed");
         return result;
     };
+
 
     const handleFiles = async (e) => {
         const files = Array.from(e.target.files);
@@ -60,7 +64,7 @@ export default function ImageUploader({ value, onChange, multiple = false }) {
         <div className={styles.container}>
             <input
                 type="file"
-                accept="image/*"
+                accept="image/*,video/*"
                 multiple={multiple}
                 onChange={handleFiles}
                 disabled={uploading}
