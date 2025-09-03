@@ -43,7 +43,7 @@ export default function CategoryDetails() {
             // 2) Load locations via RPC that returns GeoJSON for coordinates
             // Function should return: id, name, short_description, gallery_urls, slug, category_name, coordinates (GeoJSON)
             const { data: locs, error: locErr } = await supabase
-                .rpc("get_locations_by_category", { cat_id: cat.id });
+                .rpc("get_locations_by_category_with_geojson", { cat_id: cat.id });
 
             if (locErr) {
                 if (!cancelled) {
