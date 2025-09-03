@@ -46,6 +46,12 @@
     font-weight: 500;
 }
 
+.navbar a:hover {
+    text-decoration: none;
+    color: #dd143c;
+    font-weight: 1000;
+}
+
 .icons {
     height: 24px;
     width: 24px;
